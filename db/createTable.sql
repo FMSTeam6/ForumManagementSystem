@@ -20,9 +20,9 @@ create table users(
 
                       password varchar (100) not null,
 
-                      isAdmin boolean not null,
+                      is_admin boolean not null,
 
-                      isBanned boolean not null
+                      is_banned boolean not null
 
 
 );
