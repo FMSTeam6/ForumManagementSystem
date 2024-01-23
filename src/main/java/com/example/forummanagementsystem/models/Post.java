@@ -1,8 +1,10 @@
 package com.example.forummanagementsystem.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
+import java.util.Set;
 
 @Entity
 @Table(name = "posts")
@@ -31,6 +33,16 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User postCreatedBy;
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "posts_tags",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+
+    )
+    private Set<Tag> tags;
 
     public Post() {
     }
