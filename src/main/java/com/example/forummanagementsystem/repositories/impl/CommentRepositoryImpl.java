@@ -62,7 +62,7 @@ public class CommentRepositoryImpl implements CommentRepository {
         try(Session session = sessionFactory.openSession()){
             session.beginTransaction();
             session.persist(comment);
-            session.beginTransaction().commit();
+            session.getTransaction().commit();
         }
 
     }
@@ -72,7 +72,7 @@ public class CommentRepositoryImpl implements CommentRepository {
         try(Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.merge(comment);
-            session.beginTransaction().commit();;
+            session.getTransaction().commit();;
         }
 
     }
@@ -83,7 +83,7 @@ public class CommentRepositoryImpl implements CommentRepository {
         try(Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.remove(commitToDelete);
-            session.beginTransaction().commit();
+            session.getTransaction().commit();
         }
 
     }
