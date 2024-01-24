@@ -21,13 +21,13 @@ public interface UserRepository {
 
     void update(User user);
 
-    boolean banUser(User user);
+    void banUser(User user);
 
-    boolean unBanUser(User user);
+    void unBanUser(User user);
 
-    boolean giveAdminRights(User user);
+    void giveAdminRights(User user);
 
-    boolean deleteAdminRights(User user);
+    void deleteAdminRights(User user);
 
 
 

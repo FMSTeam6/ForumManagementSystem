@@ -1,6 +1,6 @@
 package com.example.forummanagementsystem.models;
 
-<<<<<<< HEAD
+
 import jakarta.persistence.*;
 
 @Entity
@@ -57,7 +57,5 @@ public class Comment {
     public void setPost(Post post) {
         this.post = post;
     }
-=======
-public class Comment {
->>>>>>> 97a418f (Revert "Revert "Trying git repository if it is working corectly"")
 }
+
