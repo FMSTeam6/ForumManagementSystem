@@ -1,6 +1,6 @@
 package com.example.forummanagementsystem.repositories;
 
-import com.example.forummanagementsystem.models.FilterOptions;
+import com.example.forummanagementsystem.models.filters.FilterOptions;
 import com.example.forummanagementsystem.models.Post;
 
 import java.sql.Timestamp;
