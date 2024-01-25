@@ -62,7 +62,7 @@ public class PostRepositoryImpl implements PostRepository {
             Timestamp currentTime = Timestamp.valueOf(LocalDateTime.now());
             Query<Post> query = session.createQuery(
                     "from Post where timestampCreated <= :currentTime limit 10", Post.class);
-            query.setParameter("timestampCreated", currentTime);
+            query.setParameter("timestamp_created", currentTime);
             List<Post> result = query.list();
             if (result.isEmpty()) {
                 throw new EntityNotFoundException(

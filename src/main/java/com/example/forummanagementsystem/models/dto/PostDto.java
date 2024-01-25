@@ -12,8 +12,7 @@ public class PostDto {
     @NotNull(message = "Content can't be empty")
     @Size(min = 32, max = 8192, message = "Content can be between 32 and 8192 symbols")
     private String content;
-    // TODO
-    private Timestamp timestampCreated;
+
 
     public PostDto() {
     }
@@ -34,11 +33,4 @@ public class PostDto {
         this.content = content;
     }
 
-    public Timestamp getTimestampCreated() {
-        return timestampCreated;
-    }
-
-    public void setTimestampCreated(Timestamp timestampCreated) {
-        this.timestampCreated = timestampCreated;
-    }
 }
