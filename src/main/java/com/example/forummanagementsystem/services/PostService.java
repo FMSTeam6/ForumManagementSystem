@@ -22,7 +22,7 @@ public interface PostService {
 
     void delete(int id, User user);
 
-    public int likePost(int id, User user);
+    public void likePost(int id, User user);
 
-    public int dislikePost(int id, User user);
+    public void dislikePost(int id, User user);
 }

@@ -1,5 +1,4 @@
 package com.example.forummanagementsystem.repositories.impl;
-
 import com.example.forummanagementsystem.exceptions.EntityNotFoundException;
 import com.example.forummanagementsystem.models.Post;
 import com.example.forummanagementsystem.models.filters.FilterOptions;
@@ -11,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Repository
@@ -24,10 +26,77 @@ public class PostRepositoryImpl implements PostRepository {
         this.sessionFactory = sessionFactory;
     }
 
-    // TODO - When we implement filter options class
     @Override
     public List<Post> get(FilterOptions filterOptions) {
-        return null;
+        try (Session session = sessionFactory.openSession()) {
+            StringBuilder queryString = new StringBuilder(" from Post ");
+            ArrayList<String> filters = new ArrayList<>();
+            Map<String, Object> params = new HashMap<>();
+            filterOptions.getTitle().ifPresent(value -> {
+                filters.add(" title like: postTitle ");
+                params.put("postTitle", String.format("%%%s%%", value));
+            });
+            filterOptions.getLikes().ifPresent(value -> {
+                filters.add(" likes >=: minLikes ");
+                params.put("minLikes", value);
+            });
+            filterOptions.getDislikes().ifPresent(value -> {
+                filters.add(" dislikes <=: maxDislikes ");
+                params.put("maxDislikes", value);
+            });
+            filterOptions.getAuthor().ifPresent(value -> {
+                filters.add(" user.username =: postCreatedBy ");
+                params.put("postCreatedBy", value);
+            });
+            filterOptions.getTimestampCreated().ifPresent(value -> {
+                filters.add(" timestamp_created >=: timestampCreated ");
+                params.put("timestampCreated", value);
+            });
+            filterOptions.getTimestampCreated().ifPresent(value -> {
+                filters.add(" timestamp_created >=: timestampCreated ");
+                params.put("timestampCreated", value);
+            });
+            if (!filters.isEmpty()) {
+                queryString.append(" where ")
+                        .append(String.join(" and ", filters));
+            }
+            queryString.append(generateOrderBy(filterOptions));
+            Query<Post> query = session.createQuery(queryString.toString(), Post.class);
+            query.setProperties(params);
+            return query.list();
+        }
+    }
+    private String generateOrderBy(FilterOptions filterOptions) {
+        if (filterOptions.getSortBy().isEmpty()) {
+            return "";
+        }
+        String orderBy = "";
+        switch (filterOptions.getSortBy().get()) {
+            case "title":
+                orderBy = "title";
+                break;
+            case "author":
+                orderBy = "user.username";
+                break;
+            case "timestampCreated":
+                orderBy = "timestamp_created";
+                break;
+            case "likes":
+                orderBy = "likes";
+                break;
+            case "dislikes":
+                orderBy = "dislikes";
+                break;
+        }
+        orderBy = String.format(" orderBy %s ", orderBy);
+        if (filterOptions.getSortOrder().isPresent()
+                && containsIgnoreCase(filterOptions.getSortOrder().get(), " desc ")){
+            orderBy = String.format(" %s desc", orderBy);
+        }
+        return orderBy;
+    }
+    private static boolean containsIgnoreCase(String value, String sequence) {
+        return value.toLowerCase().contains(sequence.toLowerCase());
     }
 
     @Override
