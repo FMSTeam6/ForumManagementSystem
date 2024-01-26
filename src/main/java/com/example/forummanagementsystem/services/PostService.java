@@ -16,6 +16,8 @@ public interface PostService {
 
     List<Post> getPostByTimestamp(Timestamp timestampCreated);
 
+    List<Post> getPostByAuthor(String username);
+
     void create(Post post, User user);
 
     void update(Post post, User user);

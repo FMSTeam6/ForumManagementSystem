@@ -43,6 +43,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<Post> getPostByAuthor(String username) {
+        return postRepository.getPostByAuthor(username);
+    }
+
+    @Override
     public List<Post> getPostByTimestamp(Timestamp timestampCreated) {
 
         return postRepository.getPostByTimeStamp(timestampCreated);

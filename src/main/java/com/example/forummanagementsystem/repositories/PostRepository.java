@@ -1,5 +1,6 @@
 package com.example.forummanagementsystem.repositories;
 
+import com.example.forummanagementsystem.models.User;
 import com.example.forummanagementsystem.models.filters.FilterOptions;
 import com.example.forummanagementsystem.models.Post;
 
@@ -14,6 +15,8 @@ public interface PostRepository {
     Post getPostByTitle(String title);
 
     List<Post> getPostByTimeStamp(Timestamp timestampCreated);
+
+    List<Post> getPostByAuthor(String username);
 
     void create(Post post);
 

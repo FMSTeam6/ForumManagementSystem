@@ -5,13 +5,13 @@ import java.util.Optional;
 
 // TODO
 public class FilterOptions {
-    private Optional<String> title;
-    private Optional<String> author;
-    private Optional<Timestamp> timestampCreated;
+    private final Optional<String> title;
+    private final Optional<String> author;
+    private final Optional<Timestamp> timestampCreated;
     private Optional<Integer> likes;
     private Optional<Integer> dislikes;
-    private Optional<String> sortBy;
-    private Optional<String> sortOrder;
+    private final Optional<String> sortBy;
+    private final Optional<String> sortOrder;
 
     public FilterOptions(String title,
                          String author,
@@ -23,8 +23,8 @@ public class FilterOptions {
         this.title = Optional.ofNullable(title);
         this.author = Optional.ofNullable(author);
         this.timestampCreated = Optional.ofNullable(timestampCreated);
-        this.likes = Optional.ofNullable(likes);
         this.likes = Optional.ofNullable(dislikes);
+        this.dislikes = Optional.ofNullable(likes);
         this.sortBy = Optional.ofNullable(sortBy);
         this.sortOrder = Optional.ofNullable(sortOrder);
     }

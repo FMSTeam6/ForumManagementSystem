@@ -35,11 +35,11 @@ public class PostDto {
         this.content = content;
     }
 
-    public Set<Tag> getTag() {
-        return tag;
+    public String getTag() {
+        return tag.toString();
     }
 
-  //  public void setTag(String tag) {
-      //  this.tag = tag;
-   // }
+    public void setTag(Set<Tag> tag) {
+        this.tag = tag;
+    }
 }

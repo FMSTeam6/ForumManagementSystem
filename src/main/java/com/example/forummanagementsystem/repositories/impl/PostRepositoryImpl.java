@@ -124,6 +124,20 @@ public class PostRepositoryImpl implements PostRepository {
         }
     }
 
+    @Override
+    public List<Post> getPostByAuthor(String username) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Post> query = session.createQuery(
+                    "from Post p join p.postCreatedBy u where u.username = :username", Post.class);
+            query.setParameter("username", username);
+            List<Post> result = query.list();
+            if (result.isEmpty()) {
+                throw new EntityNotFoundException("Post", "username", username);
+            }
+            return query.list();
+        }
+    }
+
     // TODO - We should try this method for the 10 recently created posts when service is done
     @Override
     public List<Post> getPostByTimeStamp(Timestamp timestampCreated) {
