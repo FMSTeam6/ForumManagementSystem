@@ -24,7 +24,7 @@ public class HibernateConfig {
         dbPassword = env.getProperty("database.password");
     }
 
-    @Bean (name = "entityManagerFactory")
+    @Bean(name = "entityManagerFactory")
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
@@ -49,7 +49,7 @@ public class HibernateConfig {
         hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.MariaDBDialect");
 
         // Configure code-first capabilities
-        //hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
+         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "update");
 
         return hibernateProperties;
     }

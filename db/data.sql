@@ -1,4 +1,4 @@
-use forum_system;
+use forum;
 
 -- data tags
 
@@ -36,15 +36,15 @@ VALUES (5,'SecondPost','This is a second post',1,1,'2024-01-12 15:08:56',5);
 
 -- data comments
 
-INSERT INTO comments(comment_id, text, author_id, post_id)
+INSERT INTO comments(comment_id, text, user_id, post_id)
 VALUES (1,'First Comment',1,1);
-INSERT INTO comments(comment_id, text, author_id, post_id)
+INSERT INTO comments(comment_id, text, user_id, post_id)
 VALUES (2,'Second Comment',2,2);
-INSERT INTO comments(comment_id, text, author_id, post_id)
+INSERT INTO comments(comment_id, text, user_id, post_id)
 VALUES (3,'First Comment',3,1);
-INSERT INTO comments(comment_id, text, author_id, post_id)
+INSERT INTO comments(comment_id, text, user_id, post_id)
 VALUES (4,'Second Comment',4,3);
-INSERT INTO comments(comment_id, text, author_id, post_id)
+INSERT INTO comments(comment_id, text, user_id, post_id)
 VALUES (5,'First Comment',5,4);
 
 -- data posts_tags

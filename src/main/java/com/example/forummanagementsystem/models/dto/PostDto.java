@@ -1,9 +1,10 @@
 package com.example.forummanagementsystem.models.dto;
 
+import com.example.forummanagementsystem.models.Tag;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-import java.sql.Timestamp;
+import java.util.Set;
 
 public class PostDto {
     @NotNull(message = "Please choose a meaningfully title")
@@ -12,7 +13,8 @@ public class PostDto {
     @NotNull(message = "Content can't be empty")
     @Size(min = 32, max = 8192, message = "Content can be between 32 and 8192 symbols")
     private String content;
-
+    @Size(min = 3, max = 12, message = "Tag can be between 3 and 12 symbols")
+    private Set<Tag> tag;
 
     public PostDto() {
     }
@@ -33,4 +35,11 @@ public class PostDto {
         this.content = content;
     }
 
+    public Set<Tag> getTag() {
+        return tag;
+    }
+
+  //  public void setTag(String tag) {
+      //  this.tag = tag;
+   // }
 }

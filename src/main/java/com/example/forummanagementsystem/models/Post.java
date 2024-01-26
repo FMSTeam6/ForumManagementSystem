@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "posts")
@@ -31,7 +31,7 @@ public class Post {
     private Timestamp timestampCreated;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "creator_id")
     private User postCreatedBy;
 
     @JsonIgnore
@@ -42,7 +42,11 @@ public class Post {
             inverseJoinColumns = @JoinColumn(name = "tag_id")
 
     )
+
     private Set<Tag> tags;
+    @OneToMany
+    @JoinColumn(name = "comment_id")
+    private List<Comment> comments;
 
     public Post() {
     }
@@ -102,4 +106,26 @@ public class Post {
     public void setPostCreatedBy(User postCreatedBy) {
         this.postCreatedBy = postCreatedBy;
     }
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Post post = (Post) o;
+        return id == post.id && likes == post.likes && dislikes == post.dislikes && Objects.equals(title, post.title) && Objects.equals(timestampCreated, post.timestampCreated) && Objects.equals(postCreatedBy, post.postCreatedBy) && Objects.equals(tags, post.tags);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
 }
