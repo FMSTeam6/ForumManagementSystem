@@ -74,6 +74,7 @@ public class CommentServiceImpl implements CommentServices {
         checkIfUserAuthorOrAdmin(id, user);
         //TODO user must be delete comment from commentList
         commentRepository.deleteComment(id);
+        user.getComments().remove(id);
     }
 
     @Override

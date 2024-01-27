@@ -23,7 +23,11 @@ public class UserRepositoryImpl implements UserRepository {
     //TODO
     @Override
     public List<User> getAll() {
-        return null;
+        try(Session session = sessionFactory.openSession()){
+            Query<User> query = session.createQuery("from User",User.class);
+            return query.list();
+        }
+
     }
 
     @Override
@@ -115,12 +119,6 @@ public class UserRepositoryImpl implements UserRepository {
             session.saveOrUpdate(userToBan);
             session.getTransaction().commit();
 
-//            User userToBan = getById(user.getId());
-//            if (!userToBan.isBanned()){
-//                throw new UserAlreadyBannedException(userToBan.getUsername());
-//            }
-//            userToBan.setBanned(true);
-//            return userToBan;
         }
 
     }

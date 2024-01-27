@@ -62,7 +62,6 @@ public class PostServiceImpl implements PostService {
         boolean duplicateTitleExists = true;
         try {
             postRepository.getPostByTitle(post.getTitle());
-            User user1 =
         } catch (EntityNotFoundException e) {
             duplicateTitleExists = false;
         }
@@ -125,8 +124,8 @@ public class PostServiceImpl implements PostService {
         }
     }
 
-    private void checkIfUserIsLoggedIn(User user){
-        if(user.)
-    }
+//    private void checkIfUserIsLoggedIn(User user){
+//        if(user.)
+//    }
 }
 
