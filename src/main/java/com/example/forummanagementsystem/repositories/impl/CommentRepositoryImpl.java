@@ -4,8 +4,10 @@ import com.example.forummanagementsystem.exceptions.EntityNotFoundException;
 import com.example.forummanagementsystem.models.Comment;
 import com.example.forummanagementsystem.models.Post;
 import com.example.forummanagementsystem.models.User;
+import com.example.forummanagementsystem.models.dto.CommentDto;
 import com.example.forummanagementsystem.repositories.CommentRepository;
 import com.example.forummanagementsystem.repositories.PostRepository;
+import com.example.forummanagementsystem.repositories.UserRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -18,18 +20,20 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     private final SessionFactory sessionFactory;
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
     @Autowired
-    public CommentRepositoryImpl(SessionFactory sessionFactory, PostRepository postRepository) {
+    public CommentRepositoryImpl(SessionFactory sessionFactory, PostRepository postRepository, UserRepository userRepository) {
         this.sessionFactory = sessionFactory;
         this.postRepository = postRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
     public List<Comment> getAllCommentFromPost(int postId) {
         try(Session session = sessionFactory.openSession()) {
             Post post = postRepository.getPostById(postId);
-            Query<Comment> query = session.createQuery("from Comment WHERE id =: post",Comment.class);
-            query.setParameter("post",post);
+            Query<Comment> query = session.createQuery("from Comment WHERE commentId =: postId ",Comment.class);
+            query.setParameter("postId",postId);
             List<Comment> result = query.list();
             if (result.isEmpty()){
                 throw new EntityNotFoundException("Comment",postId);
@@ -89,13 +93,15 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public User getAuthorComment(int authorId) {
+    public List<Comment> getAuthorComment(int authorId) {
         try(Session session = sessionFactory.openSession()) {
-            User user = session.get(User.class,authorId);
-            if (user == null){
+            Query<Comment> query = session.createQuery(" from Comment where commentId = :author", Comment.class);
+            query.setParameter("author",authorId);
+            List<Comment> result = query.list();
+            if (result.isEmpty()){
                 throw new EntityNotFoundException("User",authorId);
             }
-            return user;
+            return query.list();
         }
     }
 }

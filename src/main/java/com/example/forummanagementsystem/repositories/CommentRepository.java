@@ -2,6 +2,7 @@ package com.example.forummanagementsystem.repositories;
 
 import com.example.forummanagementsystem.models.Comment;
 import com.example.forummanagementsystem.models.User;
+import com.example.forummanagementsystem.models.dto.CommentDto;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,5 +21,5 @@ public interface CommentRepository {
 
     void deleteComment(int id);
 
-    User getAuthorComment(int authorId);
+    List<Comment> getAuthorComment(int authorId);
 }
