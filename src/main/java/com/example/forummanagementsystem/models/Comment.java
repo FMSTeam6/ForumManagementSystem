@@ -1,6 +1,7 @@
 package com.example.forummanagementsystem.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -15,10 +16,12 @@ public class Comment {
     @Column(name = "text")
     private String text;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User author;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;

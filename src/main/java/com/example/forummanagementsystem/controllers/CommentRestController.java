@@ -3,9 +3,13 @@ package com.example.forummanagementsystem.controllers;
 import com.example.forummanagementsystem.exceptions.EntityNotFoundException;
 import com.example.forummanagementsystem.mappers.CommentMapper;
 import com.example.forummanagementsystem.models.Comment;
+import com.example.forummanagementsystem.models.Post;
+import com.example.forummanagementsystem.models.User;
 import com.example.forummanagementsystem.models.dto.CommentDto;
 import com.example.forummanagementsystem.services.CommentServices;
 import com.example.forummanagementsystem.services.PostService;
+import com.example.forummanagementsystem.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +23,17 @@ import java.util.stream.Collectors;
 public class CommentRestController {
 
     private final CommentServices commentServices;
+
+    private final PostService postService;
+
+    private final UserService userService;
     private final CommentMapper commentMapper;
 
     @Autowired
-    public CommentRestController(CommentServices commentServices, PostService postService, CommentMapper commentMapper) {
+    public CommentRestController(CommentServices commentServices, PostService postService, UserService userService, CommentMapper commentMapper) {
         this.commentServices = commentServices;
+        this.postService = postService;
+        this.userService = userService;
         this.commentMapper = commentMapper;
     }
 
@@ -53,9 +63,11 @@ public class CommentRestController {
         }
     }
 
-    @PostMapping("/{postid}")
-    public Comment createComment(@PathVariable int postId){
-        return null;
-    }
+//    @PostMapping("/create")
+//    public void createComment(@RequestBody Comment comment, @RequestBody Post post, @RequestBody User user){
+//        User user1 = userService.getById(user.getId());
+//        Post post1 = postService.getPostById(post.getId());
+//        commentServices.createComment(comment,post1,user1);
+//    }
 
 }

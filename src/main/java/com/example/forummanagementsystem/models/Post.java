@@ -30,6 +30,7 @@ public class Post {
     @Column(name = "timestamp_created")
     private Timestamp timestampCreated;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "creator_id")
     private User postCreatedBy;

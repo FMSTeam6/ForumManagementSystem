@@ -1,4 +1,4 @@
-use forum;
+use forum_system;
 
 -- data tags
 
@@ -63,3 +63,9 @@ VALUES (5,3);
 -- data admins_phone_number
 INSERT INTO admins_phone_number(user_id, phone_number)
 VALUES (1,'123456789');
+
+INSERT INTO users_comments(User_user_id, comments_comment_id)
+VALUES (1,1);
+
+INSERT INTO users_posts(User_user_id, posts_post_id)
+VALUES (1,1);

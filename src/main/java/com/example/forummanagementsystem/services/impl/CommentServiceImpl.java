@@ -54,8 +54,8 @@ public class CommentServiceImpl implements CommentServices {
         comment.setPost(post);
         comment.setAuthor(user);
         //TODO user must be add comment - List<Comment> commentList
-        commentRepository.createComment(comment);
         user.getComments().add(comment);
+        commentRepository.createComment(comment);
     }
 
     @Override

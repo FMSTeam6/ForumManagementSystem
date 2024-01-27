@@ -48,10 +48,10 @@ public class User {
     @Column(table = "admins_phone_number", name = "phone_number")
     private String phoneNumber;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Comment> comments;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Post> posts;
 
     public User() {
