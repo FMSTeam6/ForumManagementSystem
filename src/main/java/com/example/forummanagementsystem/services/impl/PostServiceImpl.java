@@ -7,6 +7,7 @@ import com.example.forummanagementsystem.models.Post;
 import com.example.forummanagementsystem.models.User;
 import com.example.forummanagementsystem.models.filters.FilterOptions;
 import com.example.forummanagementsystem.repositories.PostRepository;
+import com.example.forummanagementsystem.repositories.UserRepository;
 import com.example.forummanagementsystem.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,9 +23,12 @@ public class PostServiceImpl implements PostService {
             "Only admin or author can remove a post!";
     private final PostRepository postRepository;
 
+    private final UserRepository userRepository;
+
     @Autowired
-    public PostServiceImpl(PostRepository postRepository) {
+    public PostServiceImpl(PostRepository postRepository, UserRepository userRepository) {
         this.postRepository = postRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -58,6 +62,7 @@ public class PostServiceImpl implements PostService {
         boolean duplicateTitleExists = true;
         try {
             postRepository.getPostByTitle(post.getTitle());
+            User user1 =
         } catch (EntityNotFoundException e) {
             duplicateTitleExists = false;
         }
@@ -118,6 +123,10 @@ public class PostServiceImpl implements PostService {
                 throw new UnauthorizedOperationException(ONLY_ADMIN_OR_AUTHOR_CAN_REMOVE_POST);
             }
         }
+    }
+
+    private void checkIfUserIsLoggedIn(User user){
+        if(user.)
     }
 }
 

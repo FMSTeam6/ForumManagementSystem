@@ -55,6 +55,7 @@ public class CommentServiceImpl implements CommentServices {
         comment.setAuthor(user);
         //TODO user must be add comment - List<Comment> commentList
         commentRepository.createComment(comment);
+        user.getComments().add(comment);
     }
 
     @Override
@@ -62,6 +63,10 @@ public class CommentServiceImpl implements CommentServices {
         checkAuthor(comment, user);
         checkIfBanned(user);
         commentRepository.updateComment(comment);
+//        user.getComments().stream()
+//                .filter(comment1 -> comment1.getCommentId() = comment.getCommentId())
+//                .findFirst()
+//                .orElseThrow(new EntityNotFoundException("Comment", comment.getCommentId()));
     }
 
     @Override

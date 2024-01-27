@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -45,6 +47,13 @@ public class User {
     @JsonInclude(value = JsonInclude.Include.NON_NULL)
     @Column(table = "admins_phone_number", name = "phone_number")
     private String phoneNumber;
+
+    @OneToMany
+    private List<Comment> comments;
+
+    @OneToMany
+    private List<Post> posts;
+
     public User() {
     }
 
@@ -118,6 +127,22 @@ public class User {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public List<Comment> getComments() {
+        return new ArrayList<>(comments);
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public List<Post> getPosts() {
+        return new ArrayList<>(posts);
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 
     @Override
