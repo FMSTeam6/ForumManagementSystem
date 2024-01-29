@@ -19,6 +19,6 @@ public interface CommentServices {
 
     void updateComment(Comment comment, Post post, User user);
 
-    void deleteComment(int id, User user);
+    void deleteComment(int id, User user, Post post);
     List<Comment> getAuthorComment(int authorId);
 }

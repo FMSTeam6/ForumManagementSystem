@@ -10,6 +10,7 @@ import com.example.forummanagementsystem.models.dto.CommentDto;
 import com.example.forummanagementsystem.repositories.CommentRepository;
 import com.example.forummanagementsystem.repositories.PostRepository;
 import com.example.forummanagementsystem.services.CommentServices;
+import com.example.forummanagementsystem.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +23,10 @@ public class CommentServiceImpl implements CommentServices {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
 
+
     @Autowired
-    public CommentServiceImpl(CommentRepository commentRepository, PostRepository postRepository, CommentMapper commentMapper) {
+    public CommentServiceImpl(CommentRepository commentRepository, PostRepository postRepository,
+                              CommentMapper commentMapper) {
         this.commentRepository = commentRepository;
         this.postRepository = postRepository;
     }
@@ -33,8 +36,8 @@ public class CommentServiceImpl implements CommentServices {
         Post post = postRepository.getPostById(postId);
         try {
             return commentRepository.getAllCommentFromPost(postId);
-        }catch (EntityNotFoundException e){
-            throw new EntityNotFoundException("Post",postId);
+        } catch (EntityNotFoundException e) {
+            throw new EntityNotFoundException("Post", postId);
         }
     }
 
@@ -55,6 +58,7 @@ public class CommentServiceImpl implements CommentServices {
         comment.setAuthor(user);
         //TODO user must be add comment - List<Comment> commentList
         user.getComments().add(comment);
+        post.getComments().add(comment);
         commentRepository.createComment(comment);
     }
 
@@ -70,16 +74,18 @@ public class CommentServiceImpl implements CommentServices {
     }
 
     @Override
-    public void deleteComment(int id, User user) {
+    public void deleteComment(int id, User user, Post post) {
         checkIfUserAuthorOrAdmin(id, user);
         //TODO user must be delete comment from commentList
         commentRepository.deleteComment(id);
         user.getComments().remove(id);
+        post.getComments().remove(id);
+
     }
 
     @Override
     public List<Comment> getAuthorComment(int authorId) {
-       return commentRepository.getAuthorComment(authorId);
+        return commentRepository.getAuthorComment(authorId);
     }
 
     private void checkAuthor(Comment comment, User userToCheckAuthor) {
