@@ -73,7 +73,7 @@ public class UserRepositoryImpl implements UserRepository {
     public User getByFirstName(String firstName) {
         try (Session session = sessionFactory.openSession()) {
             Query<User> query = session.createQuery(
-                    "from User where first_name = :first_name", User.class);
+                    "from User where firstName = :first_name", User.class);
             query.setParameter("first_name", firstName);
             List<User> result = query.list();
             if (result.isEmpty()) {
@@ -182,4 +182,24 @@ public class UserRepositoryImpl implements UserRepository {
             session.getTransaction().commit();
         }
     }
+
+//    @Override
+//    public void deleteUser(User user) {
+//        try(Session session = sessionFactory.openSession()) {
+//
+//            User userToDelete = session.get(User.class, user.getId());
+//
+//            Query<User> query = session.createQuery(
+//                    "from User where User.isDeleted = false ", User.class
+//            );
+//            List<User> result = query.list();
+//            if (result.contains(userToDelete)) {
+//                throw new UserStatusCannotBeChangedException(userToDelete.getUsername(),"not an existing user");
+//            }
+//            session.beginTransaction();
+//            userToDelete.setDeleted(true);
+//            session.saveOrUpdate(userToDelete);
+//            session.getTransaction().commit();
+//        }
+//    }
 }

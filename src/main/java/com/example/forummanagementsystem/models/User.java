@@ -43,6 +43,9 @@ public class User {
 
     @Column(name = "is_banned")
     private boolean isBanned;
+  //  @JsonIgnore
+  //  @Column(name = "is_deleted")
+   // private boolean isDeleted;
 
     @JsonInclude(value = JsonInclude.Include.NON_NULL)
     @Column(table = "admins_phone_number", name = "phone_number")
@@ -145,18 +148,22 @@ public class User {
         this.posts = posts;
     }
 
+//    public boolean isDeleted() {
+//        return isDeleted;
+//    }
+//
+//    public void setDeleted(boolean deleted) {
+//        isDeleted = deleted;
+//    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id && isAdmin == user.isAdmin
-                && isBanned == user.isBanned
-                && Objects.equals(firstName, user.firstName)
-                && Objects.equals(lastName, user.lastName)
+        return id == user.id
                 && Objects.equals(email, user.email)
-                && Objects.equals(username, user.username)
-                && Objects.equals(password, user.password);
+                && Objects.equals(username, user.username);
     }
 
     @Override

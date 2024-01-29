@@ -29,6 +29,6 @@ public interface UserRepository {
 
     void deleteAdminRights(User user);
 
-
+  //  void deleteUser(User user);
 
 }

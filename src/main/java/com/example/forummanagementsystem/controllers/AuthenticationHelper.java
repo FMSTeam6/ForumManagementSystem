@@ -36,6 +36,9 @@ public class AuthenticationHelper {
             if (!user.getPassword().equals(password)) {
                 throw new UnauthorizedOperationException(WRONG_PASSWORD);
             }
+          //  if (user.isDeleted()){
+           //
+           // }
             return user;
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, WRONG_USERNAME);
