@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Entity
@@ -28,7 +30,8 @@ public class Post {
     private int dislikes;
 
     @Column(name = "timestamp_created")
-    private Timestamp timestampCreated;
+    private final LocalDateTime getTime = LocalDateTime.now();
+
 
     @JsonIgnore
     @ManyToOne
@@ -92,12 +95,8 @@ public class Post {
         this.dislikes = dislikes;
     }
 
-    public Timestamp getTimestampCreated() {
-        return timestampCreated;
-    }
-
-    public void setTimestampCreated(Timestamp timestampCreated) {
-        this.timestampCreated = timestampCreated;
+    public LocalDateTime getGetTime() {
+        return getTime;
     }
 
     public User getPostCreatedBy() {
@@ -121,7 +120,7 @@ public class Post {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Post post = (Post) o;
-        return id == post.id && likes == post.likes && dislikes == post.dislikes && Objects.equals(title, post.title) && Objects.equals(timestampCreated, post.timestampCreated) && Objects.equals(postCreatedBy, post.postCreatedBy) && Objects.equals(tags, post.tags);
+        return id == post.id && likes == post.likes && dislikes == post.dislikes && Objects.equals(title, post.title) && Objects.equals(getTime, post.getTime) && Objects.equals(postCreatedBy, post.postCreatedBy) && Objects.equals(tags, post.tags);
     }
 
     @Override

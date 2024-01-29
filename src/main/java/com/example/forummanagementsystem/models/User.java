@@ -12,7 +12,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "users")
 @SecondaryTable(name = "admins_phone_number",
-            pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"))
+        pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"))
 public class User {
 
     @Id
@@ -150,7 +150,13 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id && Objects.equals(username, user.username);
+        return id == user.id && isAdmin == user.isAdmin
+                && isBanned == user.isBanned
+                && Objects.equals(firstName, user.firstName)
+                && Objects.equals(lastName, user.lastName)
+                && Objects.equals(email, user.email)
+                && Objects.equals(username, user.username)
+                && Objects.equals(password, user.password);
     }
 
     @Override

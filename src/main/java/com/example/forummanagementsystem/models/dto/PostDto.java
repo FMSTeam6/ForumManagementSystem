@@ -8,13 +8,13 @@ import java.util.Set;
 
 public class PostDto {
     @NotNull(message = "Please choose a meaningfully title")
-    @Size(min = 16, max = 64, message = "Title should be between 16 and 64 symbols")
+    @Size(min = 4, max = 64, message = "Title should be between 16 and 64 symbols")
     private String title;
     @NotNull(message = "Content can't be empty")
     @Size(min = 32, max = 8192, message = "Content can be between 32 and 8192 symbols")
     private String content;
     @Size(min = 3, max = 12, message = "Tag can be between 3 and 12 symbols")
-    private Set<Tag> tag;
+    private String tag;
 
     public PostDto() {
     }
@@ -36,10 +36,10 @@ public class PostDto {
     }
 
     public String getTag() {
-        return tag.toString();
+        return tag;
     }
 
-    public void setTag(Set<Tag> tag) {
+    public void setTag(String tag) {
         this.tag = tag;
     }
 }

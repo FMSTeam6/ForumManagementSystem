@@ -45,7 +45,7 @@ public class PostRepositoryImpl implements PostRepository {
                 params.put("maxDislikes", value);
             });
             filterOptions.getAuthor().ifPresent(value -> {
-                filters.add(" user.username =: postCreatedBy ");
+                filters.add(" postCreatedBy =: postCreatedBy ");
                 params.put("postCreatedBy", value);
             });
             filterOptions.getTimestampCreated().ifPresent(value -> {
@@ -144,7 +144,7 @@ public class PostRepositoryImpl implements PostRepository {
         try (Session session = sessionFactory.openSession()) {
             Timestamp currentTime = Timestamp.valueOf(LocalDateTime.now());
             Query<Post> query = session.createQuery(
-                    "from Post where timestampCreated <= :currentTime limit 10", Post.class);
+                    "from Post where getTime <= :currentTime limit 10", Post.class);
             query.setParameter("timestamp_created", currentTime);
             List<Post> result = query.list();
             if (result.isEmpty()) {
@@ -152,7 +152,7 @@ public class PostRepositoryImpl implements PostRepository {
                         "Post", "timestampCreated", timestampCreated.toString());
             }
             return result.stream()
-                    .filter(p -> p.getTimestampCreated().compareTo(currentTime) < 0)
+                    .filter(p -> p.getGetTime().isBefore(currentTime.toLocalDateTime()))
                     .limit(10)
                     .collect(Collectors.toList());
         }
