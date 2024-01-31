@@ -52,10 +52,6 @@ public class PostRepositoryImpl implements PostRepository {
                 filters.add(" timestamp_created >=: timestampCreated ");
                 params.put("timestampCreated", value);
             });
-            filterOptions.getTimestampCreated().ifPresent(value -> {
-                filters.add(" timestamp_created >=: timestampCreated ");
-                params.put("timestampCreated", value);
-            });
             if (!filters.isEmpty()) {
                 queryString.append(" where ")
                         .append(String.join(" and ", filters));
