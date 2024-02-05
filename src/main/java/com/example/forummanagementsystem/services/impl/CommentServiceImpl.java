@@ -2,20 +2,16 @@ package com.example.forummanagementsystem.services.impl;
 
 import com.example.forummanagementsystem.exceptions.EntityNotFoundException;
 import com.example.forummanagementsystem.exceptions.UnauthorizedOperationException;
-import com.example.forummanagementsystem.mappers.CommentMapper;
 import com.example.forummanagementsystem.models.Comment;
 import com.example.forummanagementsystem.models.Post;
 import com.example.forummanagementsystem.models.User;
-import com.example.forummanagementsystem.models.dto.CommentDto;
 import com.example.forummanagementsystem.repositories.CommentRepository;
 import com.example.forummanagementsystem.repositories.PostRepository;
 import com.example.forummanagementsystem.services.CommentServices;
-import com.example.forummanagementsystem.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CommentServiceImpl implements CommentServices {
@@ -25,8 +21,7 @@ public class CommentServiceImpl implements CommentServices {
 
 
     @Autowired
-    public CommentServiceImpl(CommentRepository commentRepository, PostRepository postRepository,
-                              CommentMapper commentMapper) {
+    public CommentServiceImpl(CommentRepository commentRepository, PostRepository postRepository) {
         this.commentRepository = commentRepository;
         this.postRepository = postRepository;
     }
