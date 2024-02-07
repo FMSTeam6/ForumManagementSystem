@@ -8,6 +8,7 @@ import com.example.forummanagementsystem.models.User;
 import com.example.forummanagementsystem.repositories.CommentRepository;
 import com.example.forummanagementsystem.repositories.PostRepository;
 import com.example.forummanagementsystem.services.CommentServices;
+import com.example.forummanagementsystem.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +19,14 @@ public class CommentServiceImpl implements CommentServices {
     public static final String ERROR_MESSAGE = "You are not authorized!";
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
+    private final UserService userService;
 
 
     @Autowired
-    public CommentServiceImpl(CommentRepository commentRepository, PostRepository postRepository) {
+    public CommentServiceImpl(CommentRepository commentRepository, PostRepository postRepository, UserService userService) {
         this.commentRepository = commentRepository;
         this.postRepository = postRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -51,12 +54,10 @@ public class CommentServiceImpl implements CommentServices {
         checkIfBanned(user);
         comment.setPost(post);
         comment.setAuthor(user);
-        //TODO user must be add comment - List<Comment> commentList
         user.getComments().add(comment);
         post.getComments().add(comment);
         commentRepository.createComment(comment);
     }
-
     @Override
     public void updateComment(Comment comment, Post post, User user) {
         checkAuthor(comment, user);
@@ -71,10 +72,9 @@ public class CommentServiceImpl implements CommentServices {
     @Override
     public void deleteComment(int id, User user, Post post) {
         checkIfUserAuthorOrAdmin(id, user);
-        //TODO user must be delete comment from commentList
-        commentRepository.deleteComment(id);
         user.getComments().remove(id);
         post.getComments().remove(id);
+        commentRepository.deleteComment(id);
 
     }
 
@@ -101,4 +101,5 @@ public class CommentServiceImpl implements CommentServices {
             throw new UnauthorizedOperationException(ERROR_MESSAGE);
         }
     }
+
 }
