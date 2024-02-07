@@ -1,6 +1,7 @@
 package com.example.forummanagementsystem.controllers;
 
 import com.example.forummanagementsystem.exceptions.EntityNotFoundException;
+import com.example.forummanagementsystem.exceptions.UnauthorizedOperationException;
 import com.example.forummanagementsystem.mappers.CommentMapper;
 import com.example.forummanagementsystem.models.Comment;
 import com.example.forummanagementsystem.models.Post;
@@ -8,66 +9,93 @@ import com.example.forummanagementsystem.models.User;
 import com.example.forummanagementsystem.models.dto.CommentDto;
 import com.example.forummanagementsystem.services.CommentServices;
 import com.example.forummanagementsystem.services.PostService;
-import com.example.forummanagementsystem.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/comments")
+@RequestMapping("/api")
 public class CommentRestController {
 
     private final CommentServices commentServices;
 
     private final PostService postService;
 
-    private final UserService userService;
     private final CommentMapper commentMapper;
+    private final AuthenticationHelper authenticationHelper;
 
     @Autowired
-    public CommentRestController(CommentServices commentServices, PostService postService, UserService userService, CommentMapper commentMapper) {
+    public CommentRestController(CommentServices commentServices,
+                                 PostService postService,
+                                 CommentMapper commentMapper,
+                                 AuthenticationHelper authenticationHelper) {
         this.commentServices = commentServices;
         this.postService = postService;
-        this.userService = userService;
         this.commentMapper = commentMapper;
+        this.authenticationHelper = authenticationHelper;
     }
 
-    @GetMapping
-    public List<CommentDto> getAll() {
-        return commentServices.getAll().stream().map(commentMapper).collect(Collectors.toList());
+    @GetMapping("/comments/{postId}")
+    public List<Comment> getAllFromPost(@PathVariable int postId) {
+        return commentServices.getAllCommentFromPost(postId);
     }
 
-    @GetMapping("/{id}")
-    public CommentDto getById(@PathVariable int id) {
-        Comment comment = commentServices.getById(id);
-        return commentMapper.apply(comment);
-    }
-
-    @GetMapping("/post/{postId}")
-    public List<CommentDto> getCommentByPost(@PathVariable int postId) {
-        return commentServices.getAllCommentFromPost(postId)
-                .stream().map(commentMapper).toList();
-    }
-
-    @GetMapping("/user/{id}")
-    public List<CommentDto> getAuthor(@PathVariable int id) {
+    @GetMapping("/comment/{id}")
+    public Comment getById(@PathVariable int id) {
         try {
-            return commentServices.getAuthorComment(id).stream().map(commentMapper).collect(Collectors.toList());
+            return commentServices.getById(id);
         }catch (EntityNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
         }
     }
 
-//    @PostMapping("/create")
-//    public void createComment(@RequestBody Comment comment, @RequestBody Post post, @RequestBody User user){
-//        User user1 = userService.getById(user.getId());
-//        Post post1 = postService.getPostById(post.getId());
-//        commentServices.createComment(comment,post1,user1);
-//    }
+    @PostMapping("/create/{postId}")
+    public void createComment(@RequestHeader HttpHeaders headers, @PathVariable int postId,
+                              @Valid @RequestBody CommentDto dto){
+        try {
+            Post post = postService.getPostById(postId);
+            User user = authenticationHelper.tryGetUser(headers);
+            Comment comment1 = commentMapper.fromDto(dto);
+            commentServices.createComment(comment1,post,user);
+        }catch (EntityNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
+        }catch (UnauthorizedOperationException e){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,e.getMessage());
+        }
+    }
+
+    @PutMapping("/update/{postId}/comments/{id}")
+    public void update(@RequestHeader HttpHeaders headers,@PathVariable int postId,@PathVariable int id,
+                       @Valid @RequestBody CommentDto dto){
+        try{
+            User user = authenticationHelper.tryGetUser(headers);
+            Post post = postService.getPostById(postId);
+            Comment comment = commentMapper.fromDto(id,dto);
+            commentServices.updateComment(comment,post,user);
+        }catch (EntityNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
+        }catch (UnauthorizedOperationException e){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/delete/{postId}/comments/{id}")
+    public void delete(@RequestHeader HttpHeaders headers, @PathVariable int postId,
+                       @PathVariable int id){
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            Post post = postService.getPostById(postId);
+            commentServices.deleteComment(id,user,post);
+        }catch (EntityNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
+        }catch (UnauthorizedOperationException e){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,e.getMessage());
+        }
+    }
 
 }

@@ -20,12 +20,10 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     private final SessionFactory sessionFactory;
     private final PostRepository postRepository;
-    private final UserRepository userRepository;
     @Autowired
-    public CommentRepositoryImpl(SessionFactory sessionFactory, PostRepository postRepository, UserRepository userRepository) {
+    public CommentRepositoryImpl(SessionFactory sessionFactory, PostRepository postRepository) {
         this.sessionFactory = sessionFactory;
         this.postRepository = postRepository;
-        this.userRepository = userRepository;
     }
 
     @Override

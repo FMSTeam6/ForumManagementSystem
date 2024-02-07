@@ -5,26 +5,38 @@ import com.example.forummanagementsystem.models.Comment;
 
 import com.example.forummanagementsystem.services.CommentServices;
 import com.example.forummanagementsystem.services.PostService;
+import com.example.forummanagementsystem.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.function.Function;
 
 
 @Component
-public class CommentMapper implements Function<Comment,CommentDto> {
+public class CommentMapper {
 
+    private final CommentServices commentServices;
+    private final UserService userService;
     private final PostService postService;
-
-    public CommentMapper(PostService postService) {
+    @Autowired
+    public CommentMapper(CommentServices commentServices, UserService userService, PostService postService) {
+        this.commentServices = commentServices;
+        this.userService = userService;
         this.postService = postService;
     }
 
-    @Override
-    public CommentDto apply(Comment comment) {
-        return new CommentDto(
-                comment.getCommentId(),
-                comment.getText(),
-                comment.getAuthor().getUsername()
-        );
+
+    public Comment fromDto(int id, CommentDto dto){
+        Comment comment = fromDto(dto);
+        comment.setCommentId(id);
+        return comment;
     }
+
+    public Comment fromDto(CommentDto dto){
+        Comment comment = new Comment();
+        comment.setText(dto.getText());
+        comment.setAuthor(userService.getById(dto.getAuthorId()));
+        comment.setPost(postService.getPostById(dto.getPostId()));
+        return comment;
+    }
+
+
 }
