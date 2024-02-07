@@ -6,8 +6,8 @@ public class CommentDto {
     @NotEmpty(message = "The text can't be empty")
     private String text;
 
-    private int authorId;
-    private int postId;
+    private int author;
+    private int post;
     public CommentDto() {
     }
     public String getText() {
@@ -19,19 +19,19 @@ public class CommentDto {
     }
 
     public int getAuthorId() {
-        return authorId;
+        return author;
     }
 
     public void setAuthorId(int authorId) {
-        this.authorId = authorId;
+        this.author = authorId;
     }
 
     public int getPostId() {
-        return postId;
+        return post;
     }
 
     public void setPostId(int postId) {
-        this.postId = postId;
+        this.post = postId;
     }
 }
 

@@ -1,5 +1,6 @@
 package com.example.forummanagementsystem.services.impl;
 
+import com.example.forummanagementsystem.exceptions.EntityDuplicateException;
 import com.example.forummanagementsystem.exceptions.EntityNotFoundException;
 import com.example.forummanagementsystem.exceptions.UserStatusCannotBeChangedException;
 import com.example.forummanagementsystem.models.User;
@@ -47,12 +48,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void create(User user) {
-        User userToCreate = userRepository.getById(user.getId());
+        boolean duplicateExists = true;
         try {
-            User user1 = userRepository.getByEmail(user.getEmail());
+            userRepository.getByEmail(user.getEmail());
         } catch (EntityNotFoundException e) {
-            userRepository.create(userToCreate);
+            duplicateExists = false;
         }
+
+        if (duplicateExists) {
+            throw new EntityDuplicateException("User", "email", user.getEmail());
+        }
+        userRepository.create(user);
     }
 
     @Override
