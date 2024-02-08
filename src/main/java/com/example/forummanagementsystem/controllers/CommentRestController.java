@@ -58,10 +58,10 @@ public class CommentRestController {
     public void createComment(@RequestHeader HttpHeaders headers, @PathVariable int postId,
                               @Valid @RequestBody CommentDto dto){
         try {
-            Post post = postService.getPostById(postId);
             User user = authenticationHelper.tryGetUser(headers);
-            Comment comment1 = commentMapper.fromDto(dto);
-            commentServices.createComment(comment1,post,user);
+            Post post = postService.getPostById(postId);
+            Comment comment = commentMapper.fromDto(dto);
+            commentServices.createComment(comment,post,user);
         }catch (EntityNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
         }catch (UnauthorizedOperationException e){

@@ -33,8 +33,8 @@ public class CommentMapper {
     public Comment fromDto(CommentDto dto){
         Comment comment = new Comment();
         comment.setText(dto.getText());
-        comment.setAuthor(userService.getById(dto.getAuthorId()));
-        comment.setPost(postService.getPostById(dto.getPostId()));
+//        comment.setAuthor(userService.getById(dto.getAuthorId()));
+      //  comment.setPost(postService.getPostById(dto.getPostId()));
         return comment;
     }
 
