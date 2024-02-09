@@ -14,7 +14,8 @@ public interface PostRepository {
 
     Post getPostByTitle(String title);
 
-    List<Post> getPostByTimeStamp(Timestamp timestampCreated);
+    List<Post> getPostByTimeStamp();
+    List<Post> getAll();
 
     List<Post> getPostByAuthor(String username);
 
@@ -24,7 +25,7 @@ public interface PostRepository {
 
     void deletePost(int id);
 
-    int likePost(int id);
+    void likePost(int id);
 
-    int dislikePost(int id);
+    void dislikePost(int id);
 }

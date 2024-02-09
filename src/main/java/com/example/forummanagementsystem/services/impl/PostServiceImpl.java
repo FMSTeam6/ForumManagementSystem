@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -52,9 +54,14 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getPostByTimestamp(Timestamp timestampCreated) {
+    public List<Post> getPostByTimestamp() {
 
-        return postRepository.getPostByTimeStamp(timestampCreated);
+        return postRepository.getPostByTimeStamp();
+    }
+
+    @Override
+    public List<Post> getAll() {
+        return postRepository.getAll();
     }
 
     @Override
@@ -69,7 +76,7 @@ public class PostServiceImpl implements PostService {
         if (duplicateTitleExists) {
             throw new EntityDuplicateException("Post", "title", post.getTitle());
         }
-      //  checkIfUserIsBannedOrDeleted(user);
+        //  checkIfUserIsBannedOrDeleted(user);
         post.setPostCreatedBy(user);
         postRepository.create(post);
     }
@@ -89,14 +96,14 @@ public class PostServiceImpl implements PostService {
         if (duplicateExists) {
             throw new EntityDuplicateException("Post", "title", post.getTitle());
         }
-       // checkIfUserIsBannedOrDeleted(user);
+        // checkIfUserIsBannedOrDeleted(user);
         checkUpdatePermissions(postRepository.getPostById(post.getId()), user);
         postRepository.updatePost(post);
     }
 
     @Override
     public void delete(int id, User user) {
-       // checkIfUserIsBannedOrDeleted(user);
+        // checkIfUserIsBannedOrDeleted(user);
         checkDeletePermissions(postRepository.getPostById(id), user);
         postRepository.deletePost(id);
     }
@@ -132,8 +139,19 @@ public class PostServiceImpl implements PostService {
 //        }
 //    }
 
-//    private void checkIfUserIsLoggedIn(User user){
+    //    private void checkIfUserIsLoggedIn(User user){
 //        if(user.)
+//    }
+    @Override
+    public List<Post> mostCommented() {
+//       return getAll().stream()
+//                .sorted(Comparator.comparingInt(Post :: getComments.size))
+//                .limit(10)
+//                .collect(Collectors.toList());
+        return null;
+    }
+//    private int sizeOfCommentLst(){
+//        Post post = postRepository.
 //    }
 }
 

@@ -52,14 +52,14 @@ public class CommentServiceImpl implements CommentServices {
     @Override
     public void createComment(Comment comment, Post post, User user) {
         checkIfBanned(user);
-//        comment.setPost(post);
+        comment.setPost(post);
         comment.setAuthor(user);
-//        user.getComments().add(comment);
         post.getComments().add(comment);
         commentRepository.createComment(comment);
     }
     @Override
     public void updateComment(Comment comment, Post post, User user) {
+        comment.setAuthor(user);
         checkAuthor(comment, user);
         checkIfBanned(user);
         commentRepository.updateComment(comment);
@@ -72,7 +72,6 @@ public class CommentServiceImpl implements CommentServices {
     @Override
     public void deleteComment(int id, User user, Post post) {
         checkIfUserAuthorOrAdmin(id, user);
-//        user.getComments().remove(id);
         post.getComments().remove(id);
         commentRepository.deleteComment(id);
 

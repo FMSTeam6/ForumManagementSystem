@@ -1,4 +1,5 @@
 package com.example.forummanagementsystem.repositories.impl;
+
 import com.example.forummanagementsystem.exceptions.EntityNotFoundException;
 import com.example.forummanagementsystem.models.Post;
 import com.example.forummanagementsystem.models.filters.FilterOptions;
@@ -8,6 +9,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -25,7 +27,6 @@ public class PostRepositoryImpl implements PostRepository {
     public PostRepositoryImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
-
     @Override
     public List<Post> get(FilterOptions filterOptions) {
         try (Session session = sessionFactory.openSession()) {
@@ -62,6 +63,7 @@ public class PostRepositoryImpl implements PostRepository {
             return query.list();
         }
     }
+
     private String generateOrderBy(FilterOptions filterOptions) {
         if (filterOptions.getSortBy().isEmpty()) {
             return "";
@@ -86,11 +88,12 @@ public class PostRepositoryImpl implements PostRepository {
         }
         orderBy = String.format(" orderBy %s ", orderBy);
         if (filterOptions.getSortOrder().isPresent()
-                && containsIgnoreCase(filterOptions.getSortOrder().get(), " desc ")){
+                && containsIgnoreCase(filterOptions.getSortOrder().get(), " desc ")) {
             orderBy = String.format(" %s desc", orderBy);
         }
         return orderBy;
     }
+
     private static boolean containsIgnoreCase(String value, String sequence) {
         return value.toLowerCase().contains(sequence.toLowerCase());
     }
@@ -136,21 +139,27 @@ public class PostRepositoryImpl implements PostRepository {
 
     // TODO - We should try this method for the 10 recently created posts when service is done
     @Override
-    public List<Post> getPostByTimeStamp(Timestamp timestampCreated) {
+    public List<Post> getPostByTimeStamp() {
         try (Session session = sessionFactory.openSession()) {
-            Timestamp currentTime = Timestamp.valueOf(LocalDateTime.now());
+            LocalDateTime currentTime = LocalDateTime.now();
             Query<Post> query = session.createQuery(
-                    "from Post where getTime <= :currentTime limit 10", Post.class);
-            query.setParameter("timestamp_created", currentTime);
+                    "from Post where getTime <= :currentTime order by id desc limit 10", Post.class);
+            query.setParameter("currentTime", currentTime);
             List<Post> result = query.list();
             if (result.isEmpty()) {
                 throw new EntityNotFoundException(
-                        "Post", "timestampCreated", timestampCreated.toString());
+                        "Post", "timestampCreated", currentTime.toString());
             }
-            return result.stream()
-                    .filter(p -> p.getGetTime().isBefore(currentTime.toLocalDateTime()))
-                    .limit(10)
-                    .collect(Collectors.toList());
+            return result;
+        }
+    }
+
+    @Override
+    public List<Post> getAll() {
+        try (Session session = sessionFactory.openSession()){
+            Query<Post> query = session.createQuery(
+                    "from Post ", Post.class);
+            return query.list();
         }
     }
 
@@ -183,24 +192,40 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public int likePost(int id) {
+    public void likePost(int id) {
         try (Session session = sessionFactory.openSession()) {
             Post post = session.get(Post.class, id);
             if (post == null) {
                 throw new EntityNotFoundException("Post", id);
             }
-            return post.getLikes() + 1;
+            session.beginTransaction();
+            session.merge(increaseLikes(post));
+            session.getTransaction().commit();
         }
     }
 
     @Override
-    public int dislikePost(int id) {
+    public void dislikePost(int id) {
         try (Session session = sessionFactory.openSession()) {
             Post post = session.get(Post.class, id);
             if (post == null) {
                 throw new EntityNotFoundException("Post", id);
             }
-            return post.getDislikes() + 1;
+            session.beginTransaction();
+            session.merge(dislikes(post));
+            session.getTransaction().commit();
         }
+    }
+
+    Post increaseLikes(Post post) {
+        int likes = post.getLikes();
+        post.setLikes(likes + 1);
+        return post;
+    }
+
+    Post dislikes(Post post) {
+        int dislikes = post.getDislikes();
+        post.setDislikes(dislikes + 1);
+        return post;
     }
 }

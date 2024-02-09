@@ -11,7 +11,7 @@ import java.util.*;
 @Entity
 @Table(name = "posts")
 public class Post {
-
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
@@ -49,7 +49,7 @@ public class Post {
 
     private Set<Tag> tags;
     @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "comment_id")
+    @JoinColumn(name = "post_id")
     private List<Comment> comments;
 
     public Post() {
@@ -123,12 +123,21 @@ public class Post {
         this.comments = comments;
     }
 
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        Post post = (Post) o;
+//        return id == post.id && likes == post.likes && dislikes == post.dislikes && Objects.equals(title, post.title) && Objects.equals(getTime, post.getTime) && Objects.equals(postCreatedBy, post.postCreatedBy) && Objects.equals(tags, post.tags);
+//    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Post post = (Post) o;
-        return id == post.id && likes == post.likes && dislikes == post.dislikes && Objects.equals(title, post.title) && Objects.equals(getTime, post.getTime) && Objects.equals(postCreatedBy, post.postCreatedBy) && Objects.equals(tags, post.tags);
+        return id == post.id && likes == post.likes && dislikes == post.dislikes && Objects.equals(title, post.title) && Objects.equals(content, post.content) && Objects.equals(getTime, post.getTime) && Objects.equals(postCreatedBy, post.postCreatedBy) && Objects.equals(tags, post.tags) && Objects.equals(comments, post.comments);
     }
 
     @Override

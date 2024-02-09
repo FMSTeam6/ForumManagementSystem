@@ -51,11 +51,10 @@ public class User {
     @Column(table = "admins_phone_number", name = "phone_number")
     private String phoneNumber;
 
-//    @OneToMany(fetch = FetchType.EAGER)
-//    private List<Comment> comments;
 
-//    @OneToMany(fetch = FetchType.EAGER)
-//    private List<Post> posts;
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "post_id")
+    private List<Post> posts;
 
     public User() {
     }
@@ -132,21 +131,14 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-//    public List<Comment> getComments() {
-//        return new ArrayList<>(comments);
-//    }
-//
-//    public void setComments(List<Comment> comments) {
-//        this.comments = comments;
-//    }
 
-//    public List<Post> getPosts() {
-//        return new ArrayList<>(posts);
-//    }
-//
-//    public void setPosts(List<Post> posts) {
-//        this.posts = posts;
-//    }
+    public List<Post> getPosts() {
+        return new ArrayList<>(posts);
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
 
 //    public boolean isDeleted() {
 //        return isDeleted;

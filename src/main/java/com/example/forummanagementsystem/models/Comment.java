@@ -21,10 +21,10 @@ public class Comment {
     @JoinColumn(name = "user_id")
     private User author;
 
-//    @JsonIgnore
-//    @ManyToOne
-//    @JoinColumn(name = "post_id")
-//    private Post post;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
 
     public Comment() {
     }
@@ -53,12 +53,12 @@ public class Comment {
         this.author = author;
     }
 
-//    public Post getPost() {
-//        return post;
-//    }
-//
-//    public void setPost(Post post) {
-//        this.post = post;
-//    }
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+    }
 }
 

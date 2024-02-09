@@ -46,6 +46,14 @@ public class PostRestController {
         FilterOptions filterOptions = new FilterOptions(title, author, timestampCreated, likes, dislikes, sortBy, sortOrder);
         return postService.get(filterOptions);
     }
+    @GetMapping("/recent")
+    public List<Post> mostRecentPosts(){
+        return postService.getPostByTimestamp();
+    }
+    @GetMapping("/commented")
+    public List<Post> mostCommented(){
+        return postService.mostCommented();
+    }
 
     @GetMapping("/{id}")
     public Post get(@PathVariable int id) {
@@ -114,6 +122,28 @@ public class PostRestController {
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+    @PutMapping("/{id}/like")
+    public void like(@RequestHeader HttpHeaders headers, @PathVariable(name = "id") int postId){
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            postService.likePost(postId, user);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }catch (UnauthorizedOperationException e){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+    @PutMapping("/{id}/dislike")
+    public void dislike(@RequestHeader HttpHeaders headers, @PathVariable(name = "id") int postId){
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            postService.dislikePost(postId, user);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }catch (UnauthorizedOperationException e){
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }

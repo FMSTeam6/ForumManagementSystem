@@ -9,12 +9,14 @@ import java.util.List;
 
 public interface PostService {
     List<Post> get(FilterOptions filterOptions);
+    List<Post> getAll();
+    List<Post> mostCommented();
 
     Post getPostById(int id);
 
     Post getPostByTitle(String title);
 
-    List<Post> getPostByTimestamp(Timestamp timestampCreated);
+    List<Post> getPostByTimestamp();
 
     List<Post> getPostByAuthor(String username);
 
