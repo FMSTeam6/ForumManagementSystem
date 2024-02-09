@@ -12,7 +12,7 @@ import com.example.forummanagementsystem.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -144,14 +144,13 @@ public class PostServiceImpl implements PostService {
 //    }
     @Override
     public List<Post> mostCommented() {
-//       return getAll().stream()
-//                .sorted(Comparator.comparingInt(Post :: getComments.size))
-//                .limit(10)
-//                .collect(Collectors.toList());
-        return null;
+        List<Post> mostCommented = getAll().stream()
+                .sorted(Comparator.comparingInt(post -> post.getComments().size()))
+                .limit(10)
+                .collect(Collectors.toList());
+        Collections.reverse(mostCommented);
+        return mostCommented;
     }
-//    private int sizeOfCommentLst(){
-//        Post post = postRepository.
-//    }
+
 }
 
