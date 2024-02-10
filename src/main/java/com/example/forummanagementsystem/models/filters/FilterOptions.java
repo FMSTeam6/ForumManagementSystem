@@ -5,13 +5,13 @@ import java.util.Optional;
 
 // TODO
 public class FilterOptions {
-    private final Optional<String> title;
-    private final Optional<String> author;
-    private final Optional<Timestamp> timestampCreated;
+    private Optional<String> title;
+    private Optional<String> author;
+    private Optional<Timestamp> timestampCreated;
     private Optional<Integer> likes;
     private Optional<Integer> dislikes;
-    private final Optional<String> sortBy;
-    private final Optional<String> sortOrder;
+    private Optional<String> sortBy;
+    private Optional<String> sortOrder;
 
     public FilterOptions(String title,
                          String author,

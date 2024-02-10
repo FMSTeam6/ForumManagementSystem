@@ -4,12 +4,13 @@ import com.example.forummanagementsystem.models.Post;
 import com.example.forummanagementsystem.models.User;
 import com.example.forummanagementsystem.models.filters.FilterOptions;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 public interface PostService {
     List<Post> get(FilterOptions filterOptions);
+
     List<Post> getAll();
+
     List<Post> mostCommented();
 
     Post getPostById(int id);
@@ -26,7 +27,7 @@ public interface PostService {
 
     void delete(int id, User user);
 
-    public void likePost(int id, User user);
+    void likePost(int id, User user);
 
-    public void dislikePost(int id, User user);
+    void dislikePost(int id, User user);
 }

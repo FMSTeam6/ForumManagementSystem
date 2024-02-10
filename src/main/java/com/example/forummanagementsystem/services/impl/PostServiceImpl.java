@@ -7,7 +7,6 @@ import com.example.forummanagementsystem.models.Post;
 import com.example.forummanagementsystem.models.User;
 import com.example.forummanagementsystem.models.filters.FilterOptions;
 import com.example.forummanagementsystem.repositories.PostRepository;
-import com.example.forummanagementsystem.repositories.UserRepository;
 import com.example.forummanagementsystem.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,12 +24,10 @@ public class PostServiceImpl implements PostService {
             "Only admin or author can remove a post!";
     private final PostRepository postRepository;
 
-    private final UserRepository userRepository;
 
     @Autowired
-    public PostServiceImpl(PostRepository postRepository, UserRepository userRepository) {
+    public PostServiceImpl(PostRepository postRepository) {
         this.postRepository = postRepository;
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -84,6 +81,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void update(Post post, User user) {
+        checkUpdatePermissions(postRepository.getPostById(post.getId()), user);
         boolean duplicateExists = true;
         try {
             Post existingPost = postRepository.getPostByTitle(post.getTitle());
@@ -97,7 +95,6 @@ public class PostServiceImpl implements PostService {
             throw new EntityDuplicateException("Post", "title", post.getTitle());
         }
         // checkIfUserIsBannedOrDeleted(user);
-        checkUpdatePermissions(postRepository.getPostById(post.getId()), user);
         postRepository.updatePost(post);
     }
 
@@ -108,13 +105,11 @@ public class PostServiceImpl implements PostService {
         postRepository.deletePost(id);
     }
 
-    // TODO - How to show which users liked the post? Should there be another method in User?
     @Override
     public void likePost(int id, User user) {
         postRepository.likePost(id);
     }
 
-    // TODO - How to show which users disliked the post? Should there be another method in User?
     @Override
     public void dislikePost(int id, User user) {
         postRepository.dislikePost(id);
@@ -133,6 +128,7 @@ public class PostServiceImpl implements PostService {
             }
         }
     }
+    // TODO
 //    private void checkIfUserIsBannedOrDeleted(User user){
 //        if (user.isDeleted() || user.isBanned()){
 //            throw new UnauthorizedOperationException("First log in to create posts");
