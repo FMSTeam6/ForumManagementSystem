@@ -155,7 +155,6 @@ public class PostServiceImplTests {
     public void update_Should_ThrowException_When_UserIsNotCreator() {
         // Arrange
         Post mockPost = createMockPost();
-        User mockUserCreator = mockPost.getPostCreatedBy();
 
         Mockito.when(mockPostRepository.getPostById(Mockito.anyInt()))
                 .thenReturn(mockPost);

@@ -2,6 +2,7 @@ package com.example.forummanagementsystem.services.impl;
 
 import com.example.forummanagementsystem.exceptions.EntityDuplicateException;
 import com.example.forummanagementsystem.exceptions.EntityNotFoundException;
+import com.example.forummanagementsystem.exceptions.UnauthorizedOperationException;
 import com.example.forummanagementsystem.exceptions.UserStatusCannotBeChangedException;
 import com.example.forummanagementsystem.models.User;
 import com.example.forummanagementsystem.repositories.UserRepository;

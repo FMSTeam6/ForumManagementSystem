@@ -4,7 +4,9 @@ import com.example.forummanagementsystem.exceptions.EntityDuplicateException;
 import com.example.forummanagementsystem.exceptions.EntityNotFoundException;
 import com.example.forummanagementsystem.exceptions.UnauthorizedOperationException;
 import com.example.forummanagementsystem.mappers.UserMapper;
+import com.example.forummanagementsystem.models.Post;
 import com.example.forummanagementsystem.models.User;
+import com.example.forummanagementsystem.models.dto.PostDto;
 import com.example.forummanagementsystem.models.dto.UserDto;
 import com.example.forummanagementsystem.services.UserService;
 import jakarta.validation.Valid;
@@ -22,6 +24,7 @@ public class UserRestController {
 
     public static final String YOU_ARE_NOT_AUTHORIZED_TO_BROWSE_USER_INFORMATION =
             "You are not authorized to browse user information";
+    private static final String UPDATE_USER_ERROR_MESSAGE = "Only owner of the account can update personal info.";
     private final UserService userService;
     private final AuthenticationHelper authenticationHelper;
     private final UserMapper userMapper;
@@ -59,6 +62,25 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
+    // TODO now it is working like GET request and dont update info only show it
+    @PutMapping("/{id}")
+    public User update(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody UserDto userDto) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            if (user.getId() != id){
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, UPDATE_USER_ERROR_MESSAGE);
+            }
+            User userToUpdate = userMapper.fromDtoUser(id, userDto);
+            userService.update(userToUpdate);
+            return user;
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (EntityDuplicateException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
     @GetMapping("/{id}")
     public User get(@PathVariable int id, @RequestHeader HttpHeaders headers) {
         try {
@@ -70,6 +92,7 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
     private void tryAuthorize(int id, HttpHeaders headers) {
         User user = authenticationHelper.tryGetUser(headers);
         if (!user.isAdmin() && user.getId() != id) {
