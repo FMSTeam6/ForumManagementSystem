@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Register</title>
+
+   <th:block th:include="~{/fragments/head}"></th:block>
+</head>
+
+<body>
+<th:block th:include="~{/fragments/navHome}"></th:block>
+    <!-- Register Section Begin -->
+    <section class="signup spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="login__form">
+                        <h3>Register</h3>
+                        <form th:action="@{/auth/register}" th:object="${register}" th:method="POST">
+                            <div class="input__item">
+                                <input th:field="*{firstName}" type="text" placeholder="First name">
+                                <span class="icon_profile"></span>
+                            </div>
+                            <div class="input__item">
+                                <input th:field="*{lastName}" type="text" placeholder="Last name">
+                                <span class="icon_profile"></span>
+                            </div>
+                            <div class="input__item">
+                                <input th:field="*{username}" type="text" placeholder="username">
+                                <span class="icon_mail"></span>
+                            </div>
+                            <div class="input__item">
+                                <input th:field="*{password}" type="password" placeholder="Password">
+                                <span class="icon_lock"></span>
+                            </div>
+                            <div class="input__item">
+                                <input th:field="*{passwordConfirm}" type="password" placeholder="Password Confirm">
+                                <span class="icon_lock"></span>
+                            </div>
+                            <div class="input__item">
+                                <input th:field="*{email}" type="text" placeholder="Email">
+                                <span class="icon_profile"></span>
+                            </div>
+                            <button type="submit" class="site-btn">Register</button>
+                        </form>
+                        <h5>Already have an account? <a th:href="@{/auth/login}">Log In!</a></h5>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="login__social__links">
+                        <h3>Login With:</h3>
+                        <ul>
+                            <li><a th:href="@{https://www.facebook.com/}"class="facebook"><i class="fa fa-facebook"></i> Sign in With Facebook</a>
+                            </li>
+                            <li><a th:href="@{https://www.google.com}" class="google"><i class="fa fa-google"></i> Sign in With Google</a></li>
+                            <li><a th:href="@{https://twitter.com}" class="twitter"><i class="fa fa-twitter"></i> Sign in With X</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Signup Section End -->
+
+</body>
+<th:block th:include="~{/fragments/footer}"></th:block>
+</html>

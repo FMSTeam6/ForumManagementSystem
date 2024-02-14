@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Error</title>
+    <th:block th:include="~{/fragments/head}"></th:block>
+</head>
+<body>
+<th:block th:include="~{/fragments/navHome}"></th:block>
+    <div class="body-content-telerik">
+        <h2 class="label-error-telerik" th:text="${statusCode}">HTTP status code</h2>
+        <h3 class="form-error-telerik" th:text="${error}">Error message</h3>
+    </div>
+</body>
+<th:block th:include="~{/fragments/footer}"> </th:block>
+</html>

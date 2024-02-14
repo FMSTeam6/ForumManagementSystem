@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${user.username}">Username</title>
+    <th:block th:include="~{/fragments/head}"></th:block>
+</head>
+<body>
+<th:block th:include="~{/fragments/navHome}"></th:block>
+    <div>
+        <h2 class="text-center" th:text="${user.posts}">User Post</h2>
+    </div>
+        <p th:text="#{user.create.comments} + ': ' + ${user.posts}"></p>
+</body>
+<th:block th:include="~{/fragments/footer}"></th:block>
+</html>
