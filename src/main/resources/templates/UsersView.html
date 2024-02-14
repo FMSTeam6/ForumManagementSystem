@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User</title>
+    <th:block th:include="~{/fragments/head}"></th:block>
+</head>
+<body>
+<th:block th:include="~{/fragments/navHome}"></th:block>
+<div th:if="${users.isEmpty()}">
+    <h2 class="text-center" th:text="#{user.title.isEmpty}">No Users</h2>
+</div>
+<div th:unless="${users.isEmpty()}">
+    <h2 class="text-center" th:text="#{user.title.notEmpty}">All Users</h2>
+    <br/>
+</div>
+<div th:class="table">
+    <div class="header-telerik">
+        <div class="header-cell">
+            <div class="header-cell" th:text="#{users.label.firstName}">First Name</div>
+            <div class="header-cell" th:text="#{users.label.username}">Username</div>
+            <div class="header-cell" th:text="#{users.label.lastName}">Last Name</div>
+            <div class="header-cell" th:text="#{users.label.isAdmin}">Is Admin</div>
+            <div class="header-cell" th:text="#{user.label.choice.Admin}">Choice Admin</div>
+            <div class="header-cell" th:text="#{users.label.isBlocked}">Is Blocked</div>
+            <div class="header-cell" th:text="#{user.label.choice.Blocked}">Choice Admin</div>
+
+            <div class="row-label" th:each="user : ${users}">
+                <div class="cell-label">
+                    <a href="#" th:href="@{/user/{id}(id=${user.id})}" th:text="${user.username}"></a>
+                </div>
+                <div class="cell-label" th:text="${user.firstName}">First Name</div>
+                <div class="cell-label" th:text="${user.lastName}">Last Name</div>
+                <div class="cell-label" th:text="${user.isAdmin()}">Is Admin</div>
+                <div>
+                    <input class="cell-label"  th:type="radio" id="option1" name="option_group">
+                    <label for="option1">Yes</label>
+                    <input th:type="radio" id="option2" name="option_group">
+                    <label for="option2">No</label>
+                </div>
+                <div class="cell-label" th:text="${user.isBanned()}">Is Blocked</div>
+                <div>
+                    <input class="cell-label" th:type="radio" id="option11" name="option_group">
+                    <label for="option11">Yes</label>
+                    <input th:type="radio" id="option22" name="option_group">
+                    <label for="option22">No</label>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+<th:block th:include="~{/fragments/footer}"></th:block>
+</html>

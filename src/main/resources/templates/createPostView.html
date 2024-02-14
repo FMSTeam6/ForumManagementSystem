@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>New Post</title>
+    <th:block th:include="~{/fragments/head}"></th:block>
+</head>
+<body>
+<th:block th:include="~{/fragments/navHome}"></th:block>
+<br/>
+<br/>
+<br/>
+<br/>
+<div class="body-content-telerik">
+    <form th:action="@{/posts/new}" th:object="${post}"  action="#" method="POST">
+        <label th:text="#{post.label.title}">Title</label>
+        <br/>
+        <textarea th:field="*{title}" rows="3" cols="25"> </textarea>
+        <label class="label-error-telerik" th:errors="*{title}">Title error placeholder</label>
+        <br/><br/>
+         <label th:text="#{post.label.content}">Content</label>
+         <br/>
+        <textarea th:field="*{content}" rows="4" cols="35"> </textarea>
+        <label class="label-error-telerik" th:errors="*{content}">Content error placeholder</label>
+         <br/><br/>
+          <label th:text="#{post.label.tag}">Tag</label>
+         <br/>
+        <input type="text" th:field="*{tag}"/>
+        <label class="label-error-telerik" th:errors="*{tag}">Content error placeholder</label>
+         <br/><br/>
+        <input type="submit" value="Save">
+    </form>
+</div>
+
+</body>
+<th:block th:include="~{/fragments/footer}"></th:block>
+</html>

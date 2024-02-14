@@ -95,6 +95,7 @@ public class PostServiceImpl implements PostService {
             throw new EntityDuplicateException("Post", "title", post.getTitle());
         }
         // checkIfUserIsBannedOrDeleted(user);
+        post.setPostCreatedBy(user);
         postRepository.updatePost(post);
     }
 
