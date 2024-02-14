@@ -1,5 +1,6 @@
-package com.example.forummanagementsystem.controllers;
+package com.example.forummanagementsystem.controllers.rest;
 
+import com.example.forummanagementsystem.controllers.rest.AuthenticationHelper;
 import com.example.forummanagementsystem.exceptions.EntityDuplicateException;
 import com.example.forummanagementsystem.exceptions.EntityNotFoundException;
 import com.example.forummanagementsystem.exceptions.UnauthorizedOperationException;
@@ -21,7 +22,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/post")
+@RequestMapping("/api/post")
 public class PostRestController {
     private final PostService postService;
     private final PostMapper postMapper;

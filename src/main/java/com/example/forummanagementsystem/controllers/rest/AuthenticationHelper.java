@@ -1,4 +1,4 @@
-package com.example.forummanagementsystem.controllers;
+package com.example.forummanagementsystem.controllers.rest;
 
 import com.example.forummanagementsystem.exceptions.AuthenticationFailureException;
 import com.example.forummanagementsystem.exceptions.EntityNotFoundException;

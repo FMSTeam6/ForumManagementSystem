@@ -2,12 +2,13 @@ package com.example.forummanagementsystem.repositories;
 
 
 import com.example.forummanagementsystem.models.User;
+import com.example.forummanagementsystem.models.filters.SearchUser;
 
 import java.util.List;
 
 public interface UserRepository {
 
-    List<User> getAll();
+    List<User> getAll(SearchUser searchUser);
 
     User getById(int id);
 
@@ -29,6 +30,5 @@ public interface UserRepository {
 
     void deleteAdminRights(User user);
 
-  //  void deleteUser(User user);
 
 }

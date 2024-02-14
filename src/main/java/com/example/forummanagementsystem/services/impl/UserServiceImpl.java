@@ -5,6 +5,7 @@ import com.example.forummanagementsystem.exceptions.EntityNotFoundException;
 import com.example.forummanagementsystem.exceptions.UnauthorizedOperationException;
 import com.example.forummanagementsystem.exceptions.UserStatusCannotBeChangedException;
 import com.example.forummanagementsystem.models.User;
+import com.example.forummanagementsystem.models.filters.SearchUser;
 import com.example.forummanagementsystem.repositories.UserRepository;
 import com.example.forummanagementsystem.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAll() {
-        return userRepository.getAll();
+    public List<User> getAll(SearchUser searchUser) {
+        return userRepository.getAll(searchUser);
     }
 
     @Override

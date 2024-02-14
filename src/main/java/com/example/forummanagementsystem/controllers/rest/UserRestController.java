@@ -1,13 +1,14 @@
-package com.example.forummanagementsystem.controllers;
+package com.example.forummanagementsystem.controllers.rest;
 
+import com.example.forummanagementsystem.controllers.rest.AuthenticationHelper;
 import com.example.forummanagementsystem.exceptions.EntityDuplicateException;
 import com.example.forummanagementsystem.exceptions.EntityNotFoundException;
 import com.example.forummanagementsystem.exceptions.UnauthorizedOperationException;
 import com.example.forummanagementsystem.mappers.UserMapper;
-import com.example.forummanagementsystem.models.Post;
 import com.example.forummanagementsystem.models.User;
-import com.example.forummanagementsystem.models.dto.PostDto;
 import com.example.forummanagementsystem.models.dto.UserDto;
+import com.example.forummanagementsystem.models.filters.FilterOptions;
+import com.example.forummanagementsystem.models.filters.SearchUser;
 import com.example.forummanagementsystem.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserRestController {
 
     public static final String YOU_ARE_NOT_AUTHORIZED_TO_BROWSE_USER_INFORMATION =
@@ -38,13 +40,20 @@ public class UserRestController {
     }
 
     @GetMapping
-    public List<User> getAll(@RequestHeader HttpHeaders headers) {
+    public List<User> getAll(@RequestHeader HttpHeaders headers,
+                             @RequestParam(required = false) String username,
+                             @RequestParam(required = false) String email,
+                             @RequestParam(required = false) String firstName,
+                             @RequestParam(required = false) String lastName,
+                             @RequestParam(required = false) String sortBy,
+                             @RequestParam(required = false) String sortOrder) {
+        SearchUser searchUser = new SearchUser(username, email, firstName, lastName, sortBy, sortOrder);
         try {
             User user = authenticationHelper.tryGetUser(headers);
             if (!user.isAdmin()) {
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, YOU_ARE_NOT_AUTHORIZED_TO_BROWSE_USER_INFORMATION);
             }
-            return userService.getAll();
+            return userService.getAll(searchUser);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
@@ -62,12 +71,13 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
+
     // TODO now it is working like GET request and dont update info only show it
     @PutMapping("/{id}")
     public User update(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody UserDto userDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            if (user.getId() != id){
+            if (user.getId() != id) {
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, UPDATE_USER_ERROR_MESSAGE);
             }
             User userToUpdate = userMapper.fromDtoUser(id, userDto);
@@ -81,6 +91,7 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
+
     @GetMapping("/{id}")
     public User get(@PathVariable int id, @RequestHeader HttpHeaders headers) {
         try {

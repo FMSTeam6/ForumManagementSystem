@@ -1,12 +1,13 @@
 package com.example.forummanagementsystem.services;
 
 import com.example.forummanagementsystem.models.User;
+import com.example.forummanagementsystem.models.filters.SearchUser;
 
 import java.util.List;
 
 public interface UserService {
 
-    List<User> getAll();
+    List<User> getAll(SearchUser searchUser);
 
     User getById(int id);
 

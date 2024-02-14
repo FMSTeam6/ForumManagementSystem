@@ -2,14 +2,20 @@ package com.example.forummanagementsystem.repositories.impl;
 
 import com.example.forummanagementsystem.exceptions.EntityNotFoundException;
 import com.example.forummanagementsystem.exceptions.UserStatusCannotBeChangedException;
+import com.example.forummanagementsystem.models.Post;
 import com.example.forummanagementsystem.models.User;
+import com.example.forummanagementsystem.models.filters.FilterOptions;
+import com.example.forummanagementsystem.models.filters.SearchUser;
 import com.example.forummanagementsystem.repositories.UserRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -20,22 +26,13 @@ public class UserRepositoryImpl implements UserRepository {
         this.sessionFactory = sessionFactory;
     }
 
-    //TODO
-    @Override
-    public List<User> getAll() {
-        try(Session session = sessionFactory.openSession()){
-            Query<User> query = session.createQuery("from User",User.class);
-            return query.list();
-        }
-
-    }
 
     @Override
     public User getById(int id) {
-        try(Session session = sessionFactory.openSession()) {
-            User user = session.get(User.class,id);
-            if (user == null){
-                throw new EntityNotFoundException("User",id);
+        try (Session session = sessionFactory.openSession()) {
+            User user = session.get(User.class, id);
+            if (user == null) {
+                throw new EntityNotFoundException("User", id);
             }
             return user;
         }
@@ -103,16 +100,16 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void banUser(User user) {
-        try(Session session = sessionFactory.openSession()){
+        try (Session session = sessionFactory.openSession()) {
 
             User userToBan = session.get(User.class, user.getId());
 
             Query<User> query = session.createQuery(
-                    "from User where User.isBanned = true",User.class
+                    "from User where User.isBanned = true", User.class
             );
             List<User> result = query.list();
-            if (result.contains(userToBan)){
-                throw new UserStatusCannotBeChangedException(userToBan.getUsername(),"banned.");
+            if (result.contains(userToBan)) {
+                throw new UserStatusCannotBeChangedException(userToBan.getUsername(), "banned.");
             }
             session.beginTransaction();
             userToBan.setBanned(true);
@@ -125,7 +122,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void unBanUser(User user) {
-        try(Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()) {
 
             User userToUnBan = session.get(User.class, user.getId());
 
@@ -134,7 +131,7 @@ public class UserRepositoryImpl implements UserRepository {
             );
             List<User> result = query.list();
             if (result.contains(userToUnBan)) {
-                throw new UserStatusCannotBeChangedException(userToUnBan.getUsername(),"unbanned.");
+                throw new UserStatusCannotBeChangedException(userToUnBan.getUsername(), "unbanned.");
             }
             session.beginTransaction();
             userToUnBan.setBanned(false);
@@ -145,7 +142,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void giveAdminRights(User user) {
-        try(Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()) {
 
             User userToReceiveAdminRights = session.get(User.class, user.getId());
 
@@ -154,7 +151,7 @@ public class UserRepositoryImpl implements UserRepository {
             );
             List<User> result = query.list();
             if (result.contains(userToReceiveAdminRights)) {
-                throw new UserStatusCannotBeChangedException(userToReceiveAdminRights.getUsername(),"admin.");
+                throw new UserStatusCannotBeChangedException(userToReceiveAdminRights.getUsername(), "admin.");
             }
             session.beginTransaction();
             userToReceiveAdminRights.setAdmin(true);
@@ -165,7 +162,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void deleteAdminRights(User user) {
-        try(Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()) {
 
             User userToRemoveAdminRights = session.get(User.class, user.getId());
 
@@ -174,7 +171,7 @@ public class UserRepositoryImpl implements UserRepository {
             );
             List<User> result = query.list();
             if (result.contains(userToRemoveAdminRights)) {
-                throw new UserStatusCannotBeChangedException(userToRemoveAdminRights.getUsername(),"not an admin.");
+                throw new UserStatusCannotBeChangedException(userToRemoveAdminRights.getUsername(), "not an admin.");
             }
             session.beginTransaction();
             userToRemoveAdminRights.setAdmin(false);
@@ -183,23 +180,67 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
-//    @Override
-//    public void deleteUser(User user) {
-//        try(Session session = sessionFactory.openSession()) {
-//
-//            User userToDelete = session.get(User.class, user.getId());
-//
-//            Query<User> query = session.createQuery(
-//                    "from User where User.isDeleted = false ", User.class
-//            );
-//            List<User> result = query.list();
-//            if (result.contains(userToDelete)) {
-//                throw new UserStatusCannotBeChangedException(userToDelete.getUsername(),"not an existing user");
-//            }
-//            session.beginTransaction();
-//            userToDelete.setDeleted(true);
-//            session.saveOrUpdate(userToDelete);
-//            session.getTransaction().commit();
-//        }
-//    }
+    @Override
+    public List<User> getAll(SearchUser searchUser) {
+        try (Session session = sessionFactory.openSession()) {
+            StringBuilder queryString = new StringBuilder(" from User ");
+            ArrayList<String> filters = new ArrayList<>();
+            Map<String, Object> params = new HashMap<>();
+            searchUser.getUsername().ifPresent(value -> {
+                filters.add(" username like: username ");
+                params.put("username", String.format("%%%s%%", value));
+            });
+            searchUser.getEmail().ifPresent(value -> {
+                filters.add(" email like: email ");
+                params.put("email", String.format("%%%s%%", value));
+            });
+            searchUser.getFirstName().ifPresent(value -> {
+                filters.add(" first_name like: firstName ");
+                params.put("firstName", String.format("%%%s%%", value));
+            });
+            searchUser.getLastName().ifPresent(value -> {
+                filters.add(" last_name =: lastName ");
+                params.put("lastName", String.format("%%%s%%", value));
+            });
+            if (!filters.isEmpty()) {
+                queryString.append(" where ")
+                        .append(String.join(" and ", filters));
+            }
+            queryString.append(generateOrderBy(searchUser));
+            Query<User> query = session.createQuery(queryString.toString(), User.class);
+            query.setProperties(params);
+            return query.list();
+        }
+    }
+
+    private String generateOrderBy(SearchUser searchUser) {
+        if (searchUser.getSortBy().isEmpty()) {
+            return "";
+        }
+        String orderBy = "";
+        switch (searchUser.getSortBy().get()) {
+            case "username":
+                orderBy = "username";
+                break;
+            case "email":
+                orderBy = "email";
+                break;
+            case "firstName":
+                orderBy = "first_name";
+                break;
+            case "lastName":
+                orderBy = "last_name";
+                break;
+        }
+        orderBy = String.format(" orderBy %s ", orderBy);
+        if (searchUser.getSortOrder().isPresent()
+                && containsIgnoreCase(searchUser.getSortOrder().get(), " desc ")) {
+            orderBy = String.format(" %s desc", orderBy);
+        }
+        return orderBy;
+    }
+
+    private static boolean containsIgnoreCase(String value, String sequence) {
+        return value.toLowerCase().contains(sequence.toLowerCase());
+    }
 }

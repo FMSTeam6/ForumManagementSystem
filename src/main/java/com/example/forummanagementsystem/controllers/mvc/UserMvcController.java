@@ -1,6 +1,7 @@
 package com.example.forummanagementsystem.controllers.mvc;
 
 import com.example.forummanagementsystem.exceptions.EntityNotFoundException;
+import com.example.forummanagementsystem.models.filters.SearchUser;
 import com.example.forummanagementsystem.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ public class UserMvcController {
 
     @GetMapping
     public String showUser(Model model) {
-        model.addAttribute("users", userService.getAll());
+        model.addAttribute("users", userService.getAll(new SearchUser()));
         return "UsersView";
     }
 

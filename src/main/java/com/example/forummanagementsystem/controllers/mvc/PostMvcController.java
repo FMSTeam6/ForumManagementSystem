@@ -84,7 +84,7 @@ public class PostMvcController {
     }
 
     @PostMapping("/{id}/update")
-    public String updateBeer(@PathVariable int id,
+    public String updatePost(@PathVariable int id,
                              @Valid @ModelAttribute("post") PostDto dto,
                              BindingResult bindingResult,Model model) {
 
@@ -109,7 +109,7 @@ public class PostMvcController {
     //TODO DELETE
 
     @GetMapping("/{id}/delete")
-    public String deleteBeer(@PathVariable int id, Model model) {
+    public String deletePost(@PathVariable int id, Model model) {
 
         try {
             User user = userService.getById(1);

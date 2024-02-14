@@ -1,9 +1,8 @@
 package com.example.forummanagementsystem.controllers.mvc;
 
-import com.example.forummanagementsystem.controllers.AuthenticationHelper;
+import com.example.forummanagementsystem.controllers.rest.AuthenticationHelper;
 import com.example.forummanagementsystem.exceptions.AuthenticationFailureException;
 import com.example.forummanagementsystem.exceptions.EntityDuplicateException;
-import com.example.forummanagementsystem.exceptions.EntityNotFoundException;
 import com.example.forummanagementsystem.mappers.UserMapper;
 import com.example.forummanagementsystem.models.dto.UserDto;
 import com.example.forummanagementsystem.models.User;
