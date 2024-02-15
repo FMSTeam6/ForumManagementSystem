@@ -19,10 +19,12 @@
                     <form th:action="@{/auth/login}" th:object="${login}" th:method="POST">
                         <div class="input__item">
                             <input type="text" th:field="*{username}" placeholder="username">
+                            <label class="label-error-telerik" th:errors="*{username}">Content error placeholder</label>
                             <span class="icon_mail"></span>
                         </div>
                         <div class="input__item">
                             <input type="password" th:field="*{password}" placeholder="Password">
+                            <label class="label-error-telerik" th:errors="*{password}">Content error placeholder</label>
                             <span class="icon_lock"></span>
                         </div>
                         <button type="submit" class="site-btn">Login Now</button>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Posts</title>
+    <th:block th:include="~{/fragments/head}"></th:block>
+</head>
+<div class="container-fluid bg-primary px-5 d-none d-lg-block">
+    <div class="row gx-0">
+        <div class="col-lg-8 text-center text-lg-start mb-2 mb-lg-0">
+        </div>
+        <div class="col-lg-4 text-center text-lg-end">
+            <div class="d-inline-flex align-items-center" style="height: 45px;">
+                <div class="d-inline-flex align-items-center" style="height: 45px;">
+                    <a th:href="@{/admin}"><small class="me-3 text-light"><i
+                            class="fa fa-sign-in me-2"></i>Back</small></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<body>
+<br/><br/><br/>
+<div th:if="${posts.isEmpty()}">
+    <h2 class="text-center" th:text="#{post.title.isEmpty}">No Post</h2>
+</div>
+<div class="text-center" th:unless="${posts.isEmpty()}">
+    <h2 class="text-center" th:text="#{post.title.notEmpty}"> All Post</h2>
+</div>
+<br/>
+<div class="table" >
+    <div class="header-telerik">
+        <div class="header-cell">
+            <div class="header-cell" th:text="#{post.label.title}">Post Title</div>
+            <div class="header-cell" th:text="#{post.label.content}">Content</div>
+
+            <div class="row-label" th:each="post : ${posts}">
+                <div class="cell-label">
+                    <a href="#" th:href="@{/posts/{postId}(postId=${post.id})}" th:text="${post.title}"></a>
+                </div>
+                <div class="cell-label" th:text="${post.content}">Post Content</div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+<th:block th:include="~{/fragments/footer}"></th:block>
+</html>

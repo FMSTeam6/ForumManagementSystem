@@ -19,26 +19,32 @@
                         <form th:action="@{/auth/register}" th:object="${register}" th:method="POST">
                             <div class="input__item">
                                 <input th:field="*{firstName}" type="text" placeholder="First name">
+                                <label class="label-error-telerik" th:errors="*{firstName}">Content error placeholder</label>
                                 <span class="icon_profile"></span>
                             </div>
                             <div class="input__item">
                                 <input th:field="*{lastName}" type="text" placeholder="Last name">
+                                <label class="label-error-telerik" th:errors="*{lastName}">Content error placeholder</label>
                                 <span class="icon_profile"></span>
                             </div>
                             <div class="input__item">
                                 <input th:field="*{username}" type="text" placeholder="username">
+                                <label class="label-error-telerik" th:errors="*{username}">Content error placeholder</label>
                                 <span class="icon_mail"></span>
                             </div>
                             <div class="input__item">
                                 <input th:field="*{password}" type="password" placeholder="Password">
+                                <label class="label-error-telerik" th:errors="*{password}">Content error placeholder</label>
                                 <span class="icon_lock"></span>
                             </div>
                             <div class="input__item">
                                 <input th:field="*{passwordConfirm}" type="password" placeholder="Password Confirm">
+                                <label class="label-error-telerik" th:errors="*{passwordConfirm}">Content error placeholder</label>
                                 <span class="icon_lock"></span>
                             </div>
                             <div class="input__item">
                                 <input th:field="*{email}" type="text" placeholder="Email">
+                                <label class="label-error-telerik" th:errors="*{email}">Content error placeholder</label>
                                 <span class="icon_profile"></span>
                             </div>
                             <button type="submit" class="site-btn">Register</button>

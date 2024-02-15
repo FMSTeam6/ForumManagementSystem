@@ -5,7 +5,20 @@
     <th:block th:include="~{/fragments/head}"></th:block>
 </head>
 <body>
-<th:block th:include="~{/fragments/navHome}"></th:block>
+<div class="container-fluid bg-primary px-5 d-none d-lg-block">
+    <div class="row gx-0">
+        <div class="col-lg-8 text-center text-lg-start mb-2 mb-lg-0">
+        </div>
+        <div class="col-lg-4 text-center text-lg-end">
+            <div class="d-inline-flex align-items-center" style="height: 45px;">
+                <div class="d-inline-flex align-items-center" style="height: 45px;">
+                    <a th:href="@{/admin}"><small class="me-3 text-light"><i
+                            class="fa fa-sign-in me-2"></i>Back</small></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div th:if="${users.isEmpty()}">
     <h2 class="text-center" th:text="#{user.title.isEmpty}">No Users</h2>
 </div>
@@ -22,7 +35,7 @@
             <div class="header-cell" th:text="#{users.label.isAdmin}">Is Admin</div>
             <div class="header-cell" th:text="#{user.label.choice.Admin}">Choice Admin</div>
             <div class="header-cell" th:text="#{users.label.isBlocked}">Is Blocked</div>
-            <div class="header-cell" th:text="#{user.label.choice.Blocked}">Choice Admin</div>
+            <div class="header-cell" th:text="#{user.label.choice.Blocked}">Choice Blocked</div>
 
             <div class="row-label" th:each="user : ${users}">
                 <div class="cell-label">
@@ -31,17 +44,17 @@
                 <div class="cell-label" th:text="${user.firstName}">First Name</div>
                 <div class="cell-label" th:text="${user.lastName}">Last Name</div>
                 <div class="cell-label" th:text="${user.isAdmin()}">Is Admin</div>
-                <div>
-                    <input class="cell-label"  th:type="radio" id="option1" name="option_group">
+                <div class="cell-label">
+                    <input  th:type="radio" id="option1" name="myRadioAdmin">
                     <label for="option1">Yes</label>
-                    <input th:type="radio" id="option2" name="option_group">
+                    <input th:type="radio" id="option2" name="myRadioAdmin">
                     <label for="option2">No</label>
                 </div>
                 <div class="cell-label" th:text="${user.isBanned()}">Is Blocked</div>
-                <div>
-                    <input class="cell-label" th:type="radio" id="option11" name="option_group">
+                <div class="cell-label">
+                    <input th:type="radio" id="option11" name="myRadioBan">
                     <label for="option11">Yes</label>
-                    <input th:type="radio" id="option22" name="option_group">
+                    <input th:type="radio" id="option22" name="myRadioBan">
                     <label for="option22">No</label>
                 </div>
             </div>

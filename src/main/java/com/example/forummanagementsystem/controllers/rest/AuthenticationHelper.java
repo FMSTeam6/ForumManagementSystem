@@ -27,7 +27,7 @@ public class AuthenticationHelper {
         this.userService = userService;
     }
 
-    public User tryGetUser(HttpHeaders headers) {
+    public User tryGetUserFromSession(HttpHeaders headers) {
         if (!headers.containsKey(AUTHORIZATION_HEADER_NAME)) {
             throw new UnauthorizedOperationException(RESOURCE_REQUIRES_AUTHENTICATION);
         }
@@ -78,4 +78,14 @@ public class AuthenticationHelper {
             throw new AuthenticationFailureException(INVALID_AUTHENTICATION);
         }
     }
+
+    public User tryGetUserFromSession(HttpSession session){
+        try {
+            User user = userService.getByUsername((String)session.getAttribute("currentUser"));
+            return user;
+        }catch (EntityNotFoundException e){
+            throw new AuthenticationFailureException(INVALID_AUTHENTICATION);
+        }
+    }
+
 }

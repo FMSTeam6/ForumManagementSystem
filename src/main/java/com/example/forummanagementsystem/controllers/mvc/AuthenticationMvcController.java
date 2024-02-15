@@ -51,57 +51,64 @@ public class AuthenticationMvcController {
         }
 
         try {
-           User user =  authenticationHelper.tryAuthenticateUser(loginDto);
-            session.setAttribute("currentUser",loginDto.getUsername());
-            session.setAttribute("isAdmin",user.isAdmin());
-            session.setAttribute("isBanned",user.isBanned());
-            //TODO Where redirect user after login
+            User user = authenticationHelper.tryAuthenticateUser(loginDto);
+            session.setAttribute("currentUser", user.getUsername());
+            session.setAttribute("isAdmin", user.isAdmin());
+            session.setAttribute("isBanned", user.isBanned());
+            session.setAttribute("username",user.getUsername());
+            if (session.getAttribute("isAdmin").equals(true)){
+                return "redirect:/admin";
+            }
+            if (session.getAttribute("isBanned").equals(true)){
+                return "redirect:/";
+            }
+
             return "redirect:/auth/page";
         } catch (AuthenticationFailureException e) {
-            bindingResult.rejectValue("username", "auth_error",e.getMessage());
+            bindingResult.rejectValue("username", "auth_error", e.getMessage());
             return "loginView";
         }
     }
 
     @GetMapping("/logout")
-    public String handleLogout(HttpSession session){
+    public String handleLogout(HttpSession session) {
         session.removeAttribute("currentUser");
         //TODO Where redirect user after logout
         return "redirect:/";
     }
 
     @GetMapping("/register")
-    public String showRegisterPage(Model model){
-        model.addAttribute("register",new RegisterDto());
+    public String showRegisterPage(Model model) {
+        model.addAttribute("register", new RegisterDto());
         return "registerView";
     }
 
     @PostMapping("/register")
     public String handleRegister(@Valid @ModelAttribute("register") RegisterDto registerDto,
-                                 BindingResult bindingResult){
+                                 BindingResult bindingResult) {
 
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "registerView";
         }
 
-        if (!registerDto.getPassword().equals(registerDto.getPasswordConfirm())){
-            bindingResult.rejectValue("password","register_error", PASSWORD_CONFIRM_NOT_MATCH);
+        if (!registerDto.getPassword().equals(registerDto.getPasswordConfirm())) {
+            bindingResult.rejectValue("password", "register_error", PASSWORD_CONFIRM_NOT_MATCH);
             return "registerView";
         }
-            User user = userMapper.fromRegisterDto(registerDto);
+        User user = userMapper.fromRegisterDto(registerDto);
         try {
             userService.create(user);
             return "redirect:/auth/login";
-        }catch (EntityDuplicateException e){
-            bindingResult.rejectValue("username","username_error",e.getMessage());
+        } catch (EntityDuplicateException e) {
+            bindingResult.rejectValue("username", "username_error", e.getMessage());
             return "registerView";
         }
 
     }
 
     @GetMapping("/page")
-    public String userViewPage(Model model){
-        model.addAttribute("user",new UserDto());
+    public String userViewPage(Model model) {
+        model.addAttribute("user", new UserDto());
         return "userPageView";
     }
 }

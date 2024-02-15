@@ -25,6 +25,12 @@ public class SearchUser {
     }
 
     public SearchUser() {
+        this.username = Optional.empty();
+        this.email = Optional.empty();
+        this.firstName = Optional.empty();
+        this.lastName = Optional.empty();
+        this.sortBy = Optional.empty();
+        this.sortOrder = Optional.empty();
     }
 
     public Optional<String> getUsername() {

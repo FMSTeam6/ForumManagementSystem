@@ -13,6 +13,16 @@ public class FilterOptions {
     private Optional<String> sortBy;
     private Optional<String> sortOrder;
 
+    public FilterOptions() {
+        this.title = Optional.empty();
+        this.author = Optional.empty();
+        this.timestampCreated = Optional.empty();
+        this.likes = Optional.empty();
+        this.dislikes = Optional.empty();
+        this.sortBy = Optional.empty();
+        this.sortOrder = Optional.empty();
+    }
+
     public FilterOptions(String title,
                          String author,
                          Timestamp timestampCreated,

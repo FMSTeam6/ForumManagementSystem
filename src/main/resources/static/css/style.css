@@ -157,10 +157,10 @@
 .navbar-light .navbar-nav .nav-link {
     font-family: 'Roboto', sans-serif;
     position: relative;
-    padding: 35px 15px;
+    padding: 20px 15px;
     color: var(--bs-white) !important;
     font-size: 17px;
-    font-weight: 400;
+    font-weight: 300;
     outline: none;
     transition: .5s;
 }
@@ -239,13 +239,13 @@
     }
 
     .navbar.navbar-expand-lg .navbar-toggler {
-        padding: 10px 20px;
+        padding: 10px 15px;
         border: 1px solid var(--bs-primary);
         color: var(--bs-primary);
     }
 
     .navbar-light .navbar-collapse {
-        margin-top: 15px;
+        margin-top: 10px;
         border-top: 1px solid #DDDDDD;
     }
 
@@ -261,7 +261,7 @@
     }
 
     .navbar-light .navbar-brand img {
-        max-height: 45px;
+        max-height: 30px;
     }
 }
 
@@ -852,8 +852,8 @@ ol {
 
 .cell-label {
     display: table-cell;
-    width: 20%;
-    padding: 12px;
+    width: 15%;
+    padding:1px;
     border-bottom: 1px solid #dee2e6;
 }
 
@@ -903,4 +903,14 @@ ol {
     text-align: center;
     color: white;
     tab-size: 200px;
+}
+.content {
+    max-width: 300px;
+    text-align: center;
+    margin: 0 auto;
+    color: whitesmoke;
+}
+.card-group{
+    display: flex;
+    flex-flow: row wrap;
 }
