@@ -27,7 +27,7 @@ public class AuthenticationHelper {
         this.userService = userService;
     }
 
-    public User tryGetUserFromSession(HttpHeaders headers) {
+    public User tryGetUser(HttpHeaders headers) {
         if (!headers.containsKey(AUTHORIZATION_HEADER_NAME)) {
             throw new UnauthorizedOperationException(RESOURCE_REQUIRES_AUTHENTICATION);
         }

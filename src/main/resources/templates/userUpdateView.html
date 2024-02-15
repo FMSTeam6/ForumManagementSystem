@@ -1,7 +1,7 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="${currentUser.username}"></title>
+    <title th:text="${currentUser}"></title>
     <th:block th:include="~{/fragments/head}"></th:block>
 
 </head>
@@ -19,11 +19,7 @@
             <input th:field="*{lastName}"/>
             <label class="label-error-telerik" th:errors="*{lastName}">Last name error placeholder</label>
             <br/> <br/>
-            <label th:text="#{users.label.username}">Username</label>
-            <br/>
-            <input th:field="*{username}"/>
-            <label class="label-error-telerik" th:errors="*{username}">First name error placeholder</label>
-            <br/> <br/>
+
             <input type="submit" value="Update">
         </from>
     </div>

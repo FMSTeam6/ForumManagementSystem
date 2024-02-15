@@ -68,14 +68,14 @@ public class UserMvcController {
     public String updatePost(Model model, HttpSession session) {
         try {
             authenticationHelper.tryGetUserFromSession(session);
-            return "redirect:/auth/login";
+            return "userUpdateView";
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         }
     }
 
     @PostMapping("/update")
-    public String updatePost(@Valid @ModelAttribute("currentUser") UserUpdateDto dto,
+    public String updateUser(@Valid @ModelAttribute("currentUser") UserUpdateDto dto,
                              BindingResult bindingResult,
                              Model model, HttpSession session) {
 
