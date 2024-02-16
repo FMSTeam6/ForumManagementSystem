@@ -75,6 +75,7 @@ public class PostServiceImpl implements PostService {
         }
         //  checkIfUserIsBannedOrDeleted(user);
         post.setPostCreatedBy(user);
+        user.getPosts().add(post);
         postRepository.create(post);
     }
 

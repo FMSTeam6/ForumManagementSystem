@@ -71,6 +71,7 @@ public class UserServiceImpl implements UserService {
 
             userToUpdate.setFirstName(user.getFirstName());
             userToUpdate.setLastName(user.getLastName());
+            userToUpdate.setPassword(user.getPassword());
 
             userRepository.update(userToUpdate);
         } catch (EntityNotFoundException e) {

@@ -6,10 +6,18 @@
 </head>
 <body>
 <th:block th:include="~{/fragments/navHome}"></th:block>
-    <div>
-        <h2 class="text-center" th:text="${user.posts}">User Post</h2>
+    <div th:if="${user.posts.isEmpty()}">
+        <h2 class="text-center" th:text="#{user.post.isEmpty}">No Posts</h2>
     </div>
-        <p th:text="#{user.create.comments} + ': ' + ${user.posts}"></p>
+    <div class="text-center" th:unless="${user.posts.isEmpty()}">
+        <h2 class="text-center" th:text="#{user.post.isNotEmpty}"> All Posts</h2>
+    </div>
+
+    <div th:each="post : ${user.posts}">
+        <div class="text-center" th:text="${post.title}">
+
+        </div>
+    </div>
 </body>
 <th:block th:include="~{/fragments/footer}"></th:block>
 </html>

@@ -19,6 +19,11 @@
             <input th:field="*{lastName}"/>
             <label class="label-error-telerik" th:errors="*{lastName}">Last name error placeholder</label>
             <br/> <br/>
+            <label th:text="#{users.label.password}">Password</label>
+            <br/>
+            <input th:field="*{password}"/>
+            <label class="label-error-telerik" th:errors="*{password}">Password error placeholder</label>
+            <br/> <br/>
 
             <button type="submit">Update</button>
         </form>

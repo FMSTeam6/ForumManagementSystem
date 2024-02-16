@@ -48,6 +48,7 @@ public class UserMapper {
         User user = userService.getById(id);
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
+        user.setPassword(dto.getPassword());
 
         return user;
     }

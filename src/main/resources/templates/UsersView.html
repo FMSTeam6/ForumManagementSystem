@@ -33,9 +33,7 @@
             <div class="header-cell" th:text="#{users.label.firstName}">First Name</div>
             <div class="header-cell" th:text="#{users.label.lastName}">Last Name</div>
             <div class="header-cell" th:text="#{users.label.isAdmin}">Is Admin</div>
-            <div class="header-cell" th:text="#{user.label.choice.Admin}">Choice Admin</div>
             <div class="header-cell" th:text="#{users.label.isBlocked}">Is Blocked</div>
-            <div class="header-cell" th:text="#{user.label.choice.Blocked}">Choice Blocked</div>
 
             <div class="row-label" th:each="user : ${users}">
                 <div class="cell-label">
@@ -44,19 +42,8 @@
                 <div class="cell-label" th:text="${user.firstName}">First Name</div>
                 <div class="cell-label" th:text="${user.lastName}">Last Name</div>
                 <div class="cell-label" th:text="${user.isAdmin()}">Is Admin</div>
-                <div class="cell-label">
-                    <input  th:type="radio" id="option1" name="myRadioAdmin">
-                    <label for="option1">Yes</label>
-                    <input th:type="radio" id="option2" name="myRadioAdmin">
-                    <label for="option2">No</label>
-                </div>
                 <div class="cell-label" th:text="${user.isBanned()}">Is Blocked</div>
-                <div class="cell-label">
-                    <input th:type="radio" id="option11" name="myRadioBan">
-                    <label for="option11">Yes</label>
-                    <input th:type="radio" id="option22" name="myRadioBan">
-                    <label for="option22">No</label>
-                </div>
+
             </div>
         </div>
 
