@@ -569,6 +569,7 @@ ol {
 -----------------------*/
 
 .login {
+    flex: 1;
     padding-top: 130px;
     padding-bottom: 120px;
 }
@@ -913,4 +914,10 @@ ol {
 .card-group{
     display: flex;
     flex-flow: row wrap;
+}
+
+.wrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }

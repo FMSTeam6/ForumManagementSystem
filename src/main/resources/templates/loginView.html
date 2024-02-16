@@ -6,62 +6,65 @@
     <th:block th:include="~{/fragments/head}"></th:block>
 </head>
 <body>
-<th:block th:include="~{/fragments/navHome}"></th:block>
+<div class="wrapper">
+    <th:block th:include="~{/fragments/navHome}"></th:block>
 
-<!-- Login Section Begin  action-->
-<section class="login spad">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="login__form">
-                    <h3>Login</h3>
-
-                    <form th:action="@{/auth/login}" th:object="${login}" th:method="POST">
-                        <div class="input__item">
-                            <input type="text" th:field="*{username}" placeholder="username">
-                            <label class="label-error-telerik" th:errors="*{username}">Content error placeholder</label>
-                            <span class="icon_mail"></span>
-                        </div>
-                        <div class="input__item">
-                            <input type="password" th:field="*{password}" placeholder="Password">
-                            <label class="label-error-telerik" th:errors="*{password}">Content error placeholder</label>
-                            <span class="icon_lock"></span>
-                        </div>
-                        <button type="submit" class="site-btn">Login Now</button>
-                    </form>
-                    <a th:href="@{https://www.google.com/}" class="forget_pass">Forgot Your Password?</a>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="login__register">
-                    <h3>Dont’t Have An Account?</h3>
-                    <a th:href="@{/auth/register}" class="primary-btn">Register Now</a>
-                </div>
-            </div>
-        </div>
-        <div class="login__social">
-            <div class="row d-flex justify-content-center">
+    <!-- Login Section Begin  action-->
+    <section class="login spad">
+        <div class="container">
+            <div class="row">
                 <div class="col-lg-6">
-                    <div class="login__social__links">
-                        <span>or</span>
-                        <ul>
-                            <li><a th:href="@{https://www.facebook.com/}" class="facebook"><i
-                                    class="fa fa-facebook"></i> Sign in With
-                                Facebook</a></li>
-                            <li><a th:href="@{https://www.google.com}" class="google"><i class="fa fa-google"></i> Sign
-                                in With Google</a></li>
-                            <li><a th:href="@{https://twitter.com}" class="twitter"><i class="fa fa-twitter"></i> Sign
-                                in With X</a>
-                            </li>
-                        </ul>
+                    <div class="login__form">
+                        <h3>Login</h3>
+
+                        <form th:action="@{/auth/login}" th:object="${login}" th:method="POST">
+                            <div class="input__item">
+                                <input type="text" th:field="*{username}" placeholder="username">
+                                <label class="label-error-telerik" th:errors="*{username}">Content error placeholder</label>
+                                <span class="icon_mail"></span>
+                            </div>
+                            <div class="input__item">
+                                <input type="password" th:field="*{password}" placeholder="Password">
+                                <label class="label-error-telerik" th:errors="*{password}">Content error placeholder</label>
+                                <span class="icon_lock"></span>
+                            </div>
+                            <button type="submit" class="site-btn">Login Now</button>
+                        </form>
+                        <a th:href="@{https://www.google.com/}" class="forget_pass">Forgot Your Password?</a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="login__register">
+                        <h3>Dont’t Have An Account?</h3>
+                        <a th:href="@{/auth/register}" class="primary-btn">Register Now</a>
+                    </div>
+                </div>
+            </div>
+            <div class="login__social">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-lg-6">
+                        <div class="login__social__links">
+                            <span>or</span>
+                            <ul>
+                                <li><a th:href="@{https://www.facebook.com/}" class="facebook"><i
+                                        class="fa fa-facebook"></i> Sign in With
+                                    Facebook</a></li>
+                                <li><a th:href="@{https://www.google.com}" class="google"><i class="fa fa-google"></i> Sign
+                                    in With Google</a></li>
+                                <li><a th:href="@{https://twitter.com}" class="twitter"><i class="fa fa-twitter"></i> Sign
+                                    in With X</a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-<!-- Login Section End -->
+    </section>
+    <!-- Login Section End -->
 
+
+    <th:block th:include="~{/fragments/footer}"></th:block>
+</div>
 </body>
-<th:block th:include="~{/fragments/footer}"></th:block>
 </html>
