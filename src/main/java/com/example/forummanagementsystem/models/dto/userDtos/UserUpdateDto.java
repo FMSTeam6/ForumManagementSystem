@@ -10,8 +10,6 @@ public class UserUpdateDto {
     @NotNull(message = "Name can't be empty")
     @Size(min = 4, max = 32, message = "Last name must be between 4 and 32 symbols.")
     private String lastName;
-    @NotNull(message = "Password can't be empty!")
-    private String password;
 
     public UserUpdateDto() {
     }
@@ -32,11 +30,4 @@ public class UserUpdateDto {
         this.lastName = lastName;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

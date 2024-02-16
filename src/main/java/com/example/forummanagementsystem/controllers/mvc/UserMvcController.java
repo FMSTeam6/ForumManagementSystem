@@ -67,7 +67,7 @@ public class UserMvcController {
     @GetMapping("/update")
     public String updatePost(Model model, HttpSession session) {
         try {
-            authenticationHelper.tryGetUserFromSession(session);
+            model.addAttribute("currentUser", authenticationHelper.tryGetUserFromSession(session));
             return "userUpdateView";
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
