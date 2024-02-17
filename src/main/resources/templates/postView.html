@@ -12,9 +12,20 @@
 <br/>
 <div class="text-center">
     <p class="text-center" th:text="#{post.label.author} + ': ' + ${post.getPostCreatedBy().username}">Author creator</p>
+    <p class="text-center" th:text="#{post.label.content} + ': ' + ${post.content}">Post content</p>
     <p class="text-center"th:text="#{post.label.timeCreator} + ': ' + ${post.getGetTime()}">Time creator</p>
     <p class="text-center"th:text="#{post.label.likes} + ': ' + ${post.likes}">Likes</p>
     <p class="text-center"th:text="#{post.label.dislikes} + ': ' + ${post.dislikes}">Dislikes</p>
+    <div th:if="${post.getComments().isEmpty()}">
+        <h2 th:text="#{comment.title.isEmpty}"/>
+    </div>
+    <div th:unless="${post.getComments().isEmpty()}">
+        <h2 th:text="#{comment.title.notEmpty}"/>
+        <br/>
+        <div th:each="comment : ${post.getComments()}">
+            <h2 th:text="${comment.text}"/>
+            </div>
+    </div>
 </div>
 
 
