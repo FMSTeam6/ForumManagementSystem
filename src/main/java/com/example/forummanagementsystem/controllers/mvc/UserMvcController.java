@@ -4,6 +4,7 @@ import com.example.forummanagementsystem.controllers.rest.AuthenticationHelper;
 import com.example.forummanagementsystem.exceptions.AuthenticationFailureException;
 import com.example.forummanagementsystem.exceptions.EntityDuplicateException;
 import com.example.forummanagementsystem.exceptions.EntityNotFoundException;
+import com.example.forummanagementsystem.exceptions.UnauthorizedOperationException;
 import com.example.forummanagementsystem.mappers.UserMapper;
 import com.example.forummanagementsystem.models.User;
 import com.example.forummanagementsystem.models.dto.UserDto;
@@ -103,5 +104,6 @@ public class UserMvcController {
             return "userUpdateView";
         }
     }
+
 
 }

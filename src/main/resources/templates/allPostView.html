@@ -11,8 +11,15 @@
         <div class="col-lg-4 text-center text-lg-end">
             <div class="d-inline-flex align-items-center" style="height: 45px;">
                 <div class="d-inline-flex align-items-center" style="height: 45px;">
-                    <a th:href="@{/admin}"><small class="me-3 text-light"><i
-                            class="fa fa-sign-in me-2"></i>Back</small></a>
+                    <div th:if="${session.isAdmin}">
+                        <a th:href="@{/admin}"><small class="me-3 text-light"><i
+                                class="fa fa-sign-in me-2"></i>Back</small></a>
+                    </div>
+                    <div th:unless="${session.isAdmin}">
+                        <a th:href="@{/auth/page}"><small class="me-3 text-light"><i
+                                class="fa fa-sign-in me-2"></i>Back</small></a>
+                    </div>
+
                 </div>
             </div>
         </div>

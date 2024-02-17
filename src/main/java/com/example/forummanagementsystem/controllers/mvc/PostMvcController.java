@@ -191,4 +191,40 @@ public class PostMvcController {
             return "ErrorView";
         }
     }
+
+    @PostMapping("/{id}")
+    public String likePost(@PathVariable int id, Model model, HttpSession session){
+        try{
+            User user = authenticationHelper.tryGetUserFromSession(session);
+            model.addAttribute("post",postService.getPostById(id));
+            postService.likePost(id,user);
+            return "postView";
+        }catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (UnauthorizedOperationException e){
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }
+    }
+
+//    @PostMapping("/{id}")
+//    public String dislikePost(@PathVariable int id, Model model, HttpSession session){
+//        try{
+//            User user = authenticationHelper.tryGetUserFromSession(session);
+//            model.addAttribute("post",postService.getPostById(id));
+//            postService.dislikePost(id,user);
+//            return "postView";
+//        }catch (EntityNotFoundException e) {
+//            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+//            model.addAttribute("error", e.getMessage());
+//            return "ErrorView";
+//        } catch (UnauthorizedOperationException e){
+//            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+//            model.addAttribute("error", e.getMessage());
+//            return "ErrorView";
+//        }
+//    }
 }
