@@ -4,6 +4,7 @@ import com.example.forummanagementsystem.exceptions.EntityDuplicateException;
 import com.example.forummanagementsystem.exceptions.EntityNotFoundException;
 import com.example.forummanagementsystem.exceptions.UnauthorizedOperationException;
 import com.example.forummanagementsystem.exceptions.UserStatusCannotBeChangedException;
+import com.example.forummanagementsystem.models.Post;
 import com.example.forummanagementsystem.models.User;
 import com.example.forummanagementsystem.models.filters.SearchUser;
 import com.example.forummanagementsystem.repositories.UserRepository;
@@ -16,6 +17,7 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
+    public static final String ONLY_ADMINS_HAVE_RIGHTS_TO_DELETE_USERS = "Only admins of the forum can delete users";
     private UserRepository userRepository;
 
     @Autowired
@@ -79,6 +81,16 @@ public class UserServiceImpl implements UserService {
 
         }
 
+    }
+    @Override
+    public void delete(int id, User user) {
+        checkDeletePermissions(user);
+        userRepository.deleteUser(id);
+    }
+    private void checkDeletePermissions(User user) {
+        if (!user.isAdmin()) {
+                throw new UnauthorizedOperationException(ONLY_ADMINS_HAVE_RIGHTS_TO_DELETE_USERS);
+        }
     }
 
     @Override

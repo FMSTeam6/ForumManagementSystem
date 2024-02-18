@@ -26,7 +26,16 @@ public class UserRestController {
 
     public static final String YOU_ARE_NOT_AUTHORIZED_TO_BROWSE_USER_INFORMATION =
             "You are not authorized to browse user information";
+    public static final String USER_ALREADY_ADMIN = "This user is already an admin!";
     private static final String UPDATE_USER_ERROR_MESSAGE = "Only owner of the account can update personal info.";
+    private static final String YOU_ARE_NOT_AUTHORIZED_TO_CHANGE_USER_STATUS =
+            "You are not authorized to change user status";
+    public static final String BANNED_USERS_CAN_NOT_BECOME_ADMINS = "User is banned and can not become an admin";
+    public static final String USER_ALREADY_BANNED = "This user is already banned";
+    public static final String USER_IS_NOT_BANNED = "Can not change the status of this user";
+    public static final String USER_IS_NOT_ADMIN = "Can not change the position of this user";
+    public static final String ONLY_ADMINS_CAN_DELETE_USERS = "Only forum admins can delete user info. " +
+            "Please contact one of the admins!";
     private final UserService userService;
     private final AuthenticationHelper authenticationHelper;
     private final UserMapper userMapper;
@@ -72,7 +81,6 @@ public class UserRestController {
         }
     }
 
-    // TODO now it is working like GET request and dont update info only show it
     @PutMapping("/{id}")
     public User update(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody UserDto userDto) {
         try {
@@ -103,6 +111,87 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+    @PutMapping("/ban/{userId}")
+    public void ban(@PathVariable int userId, @RequestHeader HttpHeaders headers) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            User userToBan = userService.getById(userId);
+            if (!user.isAdmin()) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, YOU_ARE_NOT_AUTHORIZED_TO_CHANGE_USER_STATUS);
+            }
+            if (userToBan.isBanned()){
+                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, USER_ALREADY_BANNED);
+            }
+            userService.banUser(userToBan);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+    }
+    @PutMapping("/unban/{userId}")
+    public void unBan(@PathVariable int userId, @RequestHeader HttpHeaders headers) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            User userToUnBan = userService.getById(userId);
+            if (!user.isAdmin()) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, YOU_ARE_NOT_AUTHORIZED_TO_CHANGE_USER_STATUS);
+            }
+            if (!userToUnBan.isBanned()){
+                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, USER_IS_NOT_BANNED);
+            }
+            userService.unBanUser(userToUnBan);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+    }
+    @PutMapping("/makeadmin/{userId}")
+    public void makeAdmin(@PathVariable int userId, @RequestHeader HttpHeaders headers) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            User futureAdmin = userService.getById(userId);
+            if (!user.isAdmin()) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, YOU_ARE_NOT_AUTHORIZED_TO_CHANGE_USER_STATUS);
+            }
+            if (futureAdmin.isAdmin()){
+                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, USER_ALREADY_ADMIN);
+            }
+            if (futureAdmin.isBanned()){
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, BANNED_USERS_CAN_NOT_BECOME_ADMINS);
+            }
+            userService.giveAdminRights(futureAdmin);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+    }
+    @PutMapping("/takeadmin/{userId}")
+    public void takeAdmin(@PathVariable int userId, @RequestHeader HttpHeaders headers) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            User userToBeNotAdmin = userService.getById(userId);
+            if (!user.isAdmin()) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, YOU_ARE_NOT_AUTHORIZED_TO_CHANGE_USER_STATUS);
+            }
+            if (!userToBeNotAdmin.isAdmin()){
+                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, USER_IS_NOT_ADMIN);
+            }
+            userService.deleteAdminRights(userToBeNotAdmin);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+    }
+    @DeleteMapping("/{id}")
+    public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            if (!user.isAdmin()){
+                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, ONLY_ADMINS_CAN_DELETE_USERS);
+            }
+            userService.delete(id, user);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
 
     private void tryAuthorize(int id, HttpHeaders headers) {
         User user = authenticationHelper.tryGetUser(headers);
@@ -110,5 +199,4 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, YOU_ARE_NOT_AUTHORIZED_TO_BROWSE_USER_INFORMATION);
         }
     }
-    // TODO - Ban user, Delete user, Give admin rights to be implemented
 }

@@ -23,6 +23,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/comment")
 public class CommentMvcController {
@@ -63,9 +65,8 @@ public class CommentMvcController {
         return "createCommentView";
     }
 
-    @PostMapping("/new/{id}")
-    public String createComment(@Valid @ModelAttribute("comment") CommentDto dto,
-                                @PathVariable int id,
+    @PostMapping("/{postId}/new")
+    public String createComment(@PathVariable int postId, @Valid @ModelAttribute("comment") CommentDto dto,
                                 BindingResult errors,
                                 Model model,
                                 HttpSession session) {
@@ -78,11 +79,11 @@ public class CommentMvcController {
         }
 
         if (errors.hasErrors()) {
-            return "createPostView";
+            return "createCommentView";
         }
         try {
             Comment comment = commentMapper.fromDto(dto);
-            Post post = postService.getPostById(id);
+            Post post = postService.getPostById(postId);
             commentServices.createComment(comment, post, user);
             return "redirect:/";
         } catch (EntityNotFoundException e) {

@@ -3,7 +3,6 @@ package com.example.forummanagementsystem.models.filters;
 import java.sql.Timestamp;
 import java.util.Optional;
 
-// TODO
 public class FilterOptions {
     private Optional<String> title;
     private Optional<String> author;

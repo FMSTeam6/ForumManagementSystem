@@ -24,6 +24,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/post")
 public class PostRestController {
+    public static final String BANNED_USERS_CAN_NOT_CREATE = "Sorry you are banned and you can not create content. " +
+            "For more info please contact one of the admins!";
     private final PostService postService;
     private final PostMapper postMapper;
     private final AuthenticationHelper authenticationHelper;
@@ -47,12 +49,14 @@ public class PostRestController {
         FilterOptions filterOptions = new FilterOptions(title, author, timestampCreated, likes, dislikes, sortBy, sortOrder);
         return postService.get(filterOptions);
     }
+
     @GetMapping("/recent")
-    public List<Post> mostRecentPosts(){
+    public List<Post> mostRecentPosts() {
         return postService.getPostByTimestamp();
     }
+
     @GetMapping("/commented")
-    public List<Post> mostCommented(){
+    public List<Post> mostCommented() {
         return postService.mostCommented();
     }
 
@@ -87,6 +91,9 @@ public class PostRestController {
     public Post create(@RequestHeader HttpHeaders headers, @Valid @RequestBody PostDto postDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
+            if (user.isBanned()) {
+                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, BANNED_USERS_CAN_NOT_CREATE);
+            }
             Post post = postMapper.fromDto(postDto);
             postService.create(post, user);
             return post;
@@ -126,25 +133,27 @@ public class PostRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
+
     @PutMapping("/{id}/like")
-    public void like(@RequestHeader HttpHeaders headers, @PathVariable(name = "id") int postId){
+    public void like(@RequestHeader HttpHeaders headers, @PathVariable(name = "id") int postId) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             postService.likePost(postId, user);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }catch (UnauthorizedOperationException e){
+        } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
+
     @PutMapping("/{id}/dislike")
-    public void dislike(@RequestHeader HttpHeaders headers, @PathVariable(name = "id") int postId){
+    public void dislike(@RequestHeader HttpHeaders headers, @PathVariable(name = "id") int postId) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             postService.dislikePost(postId, user);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }catch (UnauthorizedOperationException e){
+        } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }

@@ -28,5 +28,6 @@ public interface UserService {
     void giveAdminRights(User user);
 
     void deleteAdminRights(User user);
+    void delete(int id, User user);
 
 }

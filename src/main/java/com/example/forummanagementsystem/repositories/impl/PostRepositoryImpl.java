@@ -27,6 +27,7 @@ public class PostRepositoryImpl implements PostRepository {
     public PostRepositoryImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
+
     @Override
     public List<Post> get(FilterOptions filterOptions) {
         try (Session session = sessionFactory.openSession()) {
@@ -137,7 +138,6 @@ public class PostRepositoryImpl implements PostRepository {
         }
     }
 
-    // TODO - We should try this method for the 10 recently created posts when service is done
     @Override
     public List<Post> getPostByTimeStamp() {
         try (Session session = sessionFactory.openSession()) {
@@ -156,7 +156,7 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public List<Post> getAll() {
-        try (Session session = sessionFactory.openSession()){
+        try (Session session = sessionFactory.openSession()) {
             Query<Post> query = session.createQuery(
                     "from Post ", Post.class);
             return query.list();

@@ -105,8 +105,8 @@ public class UserRepositoryImpl implements UserRepository {
             User userToBan = session.get(User.class, user.getId());
 
             Query<User> query = session.createQuery(
-                    "from User where User.isBanned = true", User.class
-            );
+                    "from User where isBanned = :is_banned", User.class);
+            query.setParameter("is_banned", true);
             List<User> result = query.list();
             if (result.contains(userToBan)) {
                 throw new UserStatusCannotBeChangedException(userToBan.getUsername(), "banned.");
@@ -127,8 +127,8 @@ public class UserRepositoryImpl implements UserRepository {
             User userToUnBan = session.get(User.class, user.getId());
 
             Query<User> query = session.createQuery(
-                    "from User where User.isBanned = false", User.class
-            );
+                    "from User where isBanned = :is_banned", User.class);
+            query.setParameter("is_banned", false);
             List<User> result = query.list();
             if (result.contains(userToUnBan)) {
                 throw new UserStatusCannotBeChangedException(userToUnBan.getUsername(), "unbanned.");
@@ -147,8 +147,8 @@ public class UserRepositoryImpl implements UserRepository {
             User userToReceiveAdminRights = session.get(User.class, user.getId());
 
             Query<User> query = session.createQuery(
-                    "from User where User.isAdmin = true", User.class
-            );
+                    "from User where isAdmin = :is_admin", User.class);
+            query.setParameter("is_admin", true);
             List<User> result = query.list();
             if (result.contains(userToReceiveAdminRights)) {
                 throw new UserStatusCannotBeChangedException(userToReceiveAdminRights.getUsername(), "admin.");
@@ -167,8 +167,8 @@ public class UserRepositoryImpl implements UserRepository {
             User userToRemoveAdminRights = session.get(User.class, user.getId());
 
             Query<User> query = session.createQuery(
-                    "from User where User.isAdmin = false", User.class
-            );
+                    "from User where isAdmin = :is_admin", User.class);
+            query.setParameter("is_admin", false);
             List<User> result = query.list();
             if (result.contains(userToRemoveAdminRights)) {
                 throw new UserStatusCannotBeChangedException(userToRemoveAdminRights.getUsername(), "not an admin.");
@@ -176,6 +176,15 @@ public class UserRepositoryImpl implements UserRepository {
             session.beginTransaction();
             userToRemoveAdminRights.setAdmin(false);
             session.saveOrUpdate(userToRemoveAdminRights);
+            session.getTransaction().commit();
+        }
+    }
+
+    @Override
+    public void deleteUser(int id) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.remove(getById(id));
             session.getTransaction().commit();
         }
     }

@@ -16,6 +16,7 @@ public class CommentMapper {
     private final CommentServices commentServices;
     private final UserService userService;
     private final PostService postService;
+
     @Autowired
     public CommentMapper(CommentServices commentServices, UserService userService, PostService postService) {
         this.commentServices = commentServices;
@@ -24,21 +25,21 @@ public class CommentMapper {
     }
 
 
-    public Comment fromDto(int id, CommentDto dto){
+    public Comment fromDto(int id, CommentDto dto) {
         Comment comment = fromDto(dto);
         comment.setCommentId(id);
         return comment;
     }
 
-    public Comment fromDto(CommentDto dto){
+    public Comment fromDto(CommentDto dto) {
         Comment comment = new Comment();
         comment.setText(dto.getText());
 //        comment.setAuthor(userService.getById(dto.getAuthorId()));
-      //  comment.setPost(postService.getPostById(dto.getPostId()));
+        comment.setPost(postService.getPostById(dto.getPostId()));
         return comment;
     }
 
-    public CommentDto toDto(Comment comment){
+    public CommentDto toDto(Comment comment) {
         CommentDto dto = new CommentDto();
         dto.setText(comment.getText());
         return dto;

@@ -43,9 +43,7 @@ public class User {
 
     @Column(name = "is_banned")
     private boolean isBanned;
-  //  @JsonIgnore
-  //  @Column(name = "is_deleted")
-   // private boolean isDeleted;
+
 
     @JsonInclude(value = JsonInclude.Include.NON_NULL)
     @Column(table = "admins_phone_number", name = "phone_number")
@@ -139,14 +137,6 @@ public class User {
     public void setPosts(List<Post> posts) {
         this.posts = posts;
     }
-
-//    public boolean isDeleted() {
-//        return isDeleted;
-//    }
-//
-//    public void setDeleted(boolean deleted) {
-//        isDeleted = deleted;
-//    }
 
     @Override
     public boolean equals(Object o) {

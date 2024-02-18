@@ -73,7 +73,6 @@ public class PostServiceImpl implements PostService {
         if (duplicateTitleExists) {
             throw new EntityDuplicateException("Post", "title", post.getTitle());
         }
-        //  checkIfUserIsBannedOrDeleted(user);
         post.setPostCreatedBy(user);
         user.getPosts().add(post);
         postRepository.create(post);
@@ -95,14 +94,12 @@ public class PostServiceImpl implements PostService {
         if (duplicateExists) {
             throw new EntityDuplicateException("Post", "title", post.getTitle());
         }
-        // checkIfUserIsBannedOrDeleted(user);
         post.setPostCreatedBy(user);
         postRepository.updatePost(post);
     }
 
     @Override
     public void delete(int id, User user) {
-        // checkIfUserIsBannedOrDeleted(user);
         checkDeletePermissions(postRepository.getPostById(id), user);
         postRepository.deletePost(id);
     }
@@ -130,16 +127,7 @@ public class PostServiceImpl implements PostService {
             }
         }
     }
-    // TODO
-//    private void checkIfUserIsBannedOrDeleted(User user){
-//        if (user.isDeleted() || user.isBanned()){
-//            throw new UnauthorizedOperationException("First log in to create posts");
-//        }
-//    }
 
-    //    private void checkIfUserIsLoggedIn(User user){
-//        if(user.)
-//    }
     @Override
     public List<Post> mostCommented() {
         List<Post> mostCommented = getAll().stream()
