@@ -105,5 +105,31 @@ public class UserMvcController {
         }
     }
 
+    @PostMapping("/banOrAdmin/{id}")
+    public String banOrUnbanUser(@PathVariable int id, Model model,HttpSession session) {
+        try {
+            User user = authenticationHelper.tryGetUserFromSession(session);
+            model.addAttribute("banAdmin", userService.getById(id));
+            if (user.isBanned()){
+                userService.unBanUser(user);
+            }
+            if (user.isAdmin()){
+                userService.deleteAdminRights(user);
+            }
+            if (!user.isAdmin()){
+                userService.giveAdminRights(user);
+            }
+            return "UserView";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }
+    }
+
 
 }

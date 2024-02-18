@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="~{/fragments/head}"></th:block>
+    <title class="text-white">Update Comment</title>
+</head>
+<body>
+
+<div class="body-content-telerik">
+    <h2>Update Comment</h2>
+    <form th:action="@{__${requestURI}__}"  th:object="${comment}" action="#" method="POST">
+        <lable class="text-white" th:text="#{comment.label.updateText}">Text comment</lable>
+        <br/><br/>
+        <textarea type="text" th:field="*{text}"></textarea>
+        <label class="label-error-telerik" th:errors="*{text}">Text error placeholder</label>
+        <br/>
+        <input type="submit" value="Save">
+    </form>
+</div>
+
+</body>
+    <th:block th:include="~{/fragments/footer}"></th:block>
+</html>

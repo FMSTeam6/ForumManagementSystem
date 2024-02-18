@@ -13,6 +13,12 @@
         <div class="col-lg-4 text-center text-lg-end">
             <div class="d-inline-flex align-items-center" style="height: 45px;">
                 <div class="d-inline-flex align-items-center" style="height: 45px;">
+                    <a th:href="@{/posts/{id}/update(id=${post.id})}"><small class="me-3 text-light"><i
+                            class="fa fa-sign-in me-2"></i>Update Post</small></a>
+                    <a th:href="@{/comment/new}"><small class="me-3 text-light"><i
+                            class="fa fa-sign-in me-2"></i>Create new comment</small></a>
+                    <a th:href="@{/posts/{id}/delete(id=${post.id})}"><small class="me-3 text-light"><i
+                            class="fa fa-sign-in me-2"></i>Delete Post</small></a>
                     <div th:if="${session.isAdmin}">
                         <a th:href="@{/posts}"><small class="me-3 text-light"><i
                                 class="fa fa-sign-in me-2"></i>Back</small></a>
@@ -21,7 +27,6 @@
                         <a th:href="@{/posts}"><small class="me-3 text-light"><i
                                 class="fa fa-sign-in me-2"></i>Back</small></a>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -40,17 +45,18 @@
         </form>
 
     <p class="text-center"th:text="#{post.label.dislikes} + ': ' + ${post.dislikes}">Dislikes</p>
-        <<form th:action="@{/posts/{id}(id=${post.id})}" th:object="${post}" method="POST">
+        <form th:action="@{/posts/{id}(id=${post.id})}" th:object="${post}" method="POST">
             <button type="submit" value="dislike"> Dislike</button>
         </form>
-    <div th:if="${post.getComments().isEmpty()}">
+    <div class="text-white" th:if="${post.getComments().isEmpty()}">
         <h2 th:text="#{comment.title.isEmpty}"/>
     </div>
-    <div th:unless="${post.getComments().isEmpty()}">
+    <div class="text-white" th:unless="${post.getComments().isEmpty()}">
         <h2 th:text="#{comment.title.notEmpty}"/>
         <br/>
         <div th:each="comment : ${post.getComments()}">
-            <h2 th:text="${comment.text}"/>
+<!--            <h2 th:text="${comment.text}"/>-->
+            <a href="#" th:href="@{/comment/update/{id}(id=${comment.commentId})}" th:text="${comment.text}"></a>
             </div>
     </div>
 </div>

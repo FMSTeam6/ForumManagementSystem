@@ -38,5 +38,11 @@ public class CommentMapper {
         return comment;
     }
 
+    public CommentDto toDto(Comment comment){
+        CommentDto dto = new CommentDto();
+        dto.setText(comment.getText());
+        return dto;
+    }
+
 
 }

@@ -26,7 +26,7 @@
     <h2 class="text-center" th:text="#{user.title.notEmpty}">All Users</h2>
     <br/>
 </div>
-<div th:class="table">
+<div class="table">
     <div class="header-telerik">
         <div class="header-cell">
             <div class="header-cell" th:text="#{users.label.username}">Username</div>
@@ -43,12 +43,11 @@
                 <div class="cell-label" th:text="${user.lastName}">Last Name</div>
                 <div class="cell-label" th:text="${user.isAdmin()}">Is Admin</div>
                 <div class="cell-label" th:text="${user.isBanned()}">Is Blocked</div>
-
             </div>
         </div>
-
     </div>
 </div>
+
 
 </body>
 <th:block th:include="~{/fragments/footer}"></th:block>

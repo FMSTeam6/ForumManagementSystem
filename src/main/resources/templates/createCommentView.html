@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="~{/fragments/head}"></th:block>
+    <title>New Comment</title>
+</head>
+<body>
+<div class="container-fluid bg-primary px-5 d-none d-lg-block">
+    <div class="row gx-0">
+        <div class="col-lg-8 text-center text-lg-start mb-2 mb-lg-0">
+        </div>
+        <div class="col-lg-4 text-center text-lg-end">
+            <div class="d-inline-flex align-items-center" style="height: 45px;">
+                <div class="d-inline-flex align-items-center" style="height: 45px;">
+                        <a th:href="@{/posts}"><small class="me-3 text-light"><i
+                                class="fa fa-sign-in me-2"></i>Back</small></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="body-content-telerik">
+    <form th:action="@{__${requestURI}__}"  th:object="${comment}" action="#" method="POST">
+        <lable th:text="#{comment.label.text}">Text comment</lable>
+        <br/>
+        <textarea type="text" th:field="*{text}"></textarea>
+        <label class="label-error-telerik" th:errors="*{text}">Text error placeholder</label>
+        <br/>
+        <input type="submit" value="Save">
+    </form>
+</div>
+
+
+</body>
+<th:block th:include="~{/fragments/footer}"></th:block>
+</html>

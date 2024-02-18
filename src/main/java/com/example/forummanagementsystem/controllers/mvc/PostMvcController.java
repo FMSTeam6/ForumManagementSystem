@@ -100,7 +100,7 @@ public class PostMvcController {
         try {
             Post post = postMapper.fromDto(postDto);
             postService.create(post, user);
-            return "redirect:/";
+            return "redirect:/posts";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error",e.getMessage());
@@ -152,7 +152,7 @@ public class PostMvcController {
         try {
             Post post = postMapper.fromDto(id, dto);
             postService.update(post, user);
-            return "redirect:/";
+            return "redirect:/posts";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -180,7 +180,7 @@ public class PostMvcController {
 
         try {
             postService.delete(id, user);
-            return "redirect:/beers";
+            return "redirect:/posts";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());

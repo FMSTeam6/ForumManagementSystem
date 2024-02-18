@@ -5,19 +5,48 @@
     <th:block th:include="~{/fragments/head}"></th:block>
 </head>
 <body>
-<th:block th:include="~{/fragments/navHome}"></th:block>
-    <div th:if="${user.posts.isEmpty()}">
-        <h2 class="text-center" th:text="#{user.post.isEmpty}">No Posts</h2>
-    </div>
-    <div class="text-center" th:unless="${user.posts.isEmpty()}">
-        <h2 class="text-center" th:text="#{user.post.isNotEmpty}"> All Posts</h2>
-    </div>
-
-    <div th:each="post : ${user.posts}">
-        <div class="text-center" th:text="${post.title}">
-
+<div class="container-fluid bg-primary px-5 d-none d-lg-block">
+    <div class="row gx-0">
+        <div class="col-lg-8 text-center text-lg-start mb-2 mb-lg-0">
+        </div>
+        <div class="col-lg-4 text-center text-lg-end">
+            <div class="d-inline-flex align-items-center" style="height: 45px;">
+                <div class="d-inline-flex align-items-center" style="height: 45px;">
+                    <a th:href="@{/user}"><small class="me-3 text-light"><i
+                            class="fa fa-sign-in me-2"></i>Back</small></a>
+                </div>
+            </div>
         </div>
     </div>
+</div>
+<div th:if="${user.posts.isEmpty()}">
+    <h2 class="text-center" th:text="#{user.post.isEmpty}">No Posts</h2>
+</div>
+<div class="text-center" th:unless="${user.posts.isEmpty()}">
+    <h2 class="text-center" th:text="#{user.post.isNotEmpty}"> All Posts</h2>
+</div>
+<br/>
+<div th:each="post : ${user.posts}">
+    <div class="text-center" th:text="${post.title}"></div>
+</div>
+<br/>
+<div th:if="${session.isAdmin}">
+    <form class="text-white text-center" th:action="@{/user/banOrAdmin/{id}(id=${user.id})}" th:object="${banAdmin}"
+          method="POST">
+        <div th:if="${user.isAdmin()}">
+            <button type="submit" th:value="unAdmin">unAdmin</button>
+        </div>
+        <div th:unless="${user.isAdmin()}">
+            <button type="submit" th:value="Admin">Admin</button>
+        </div>
+        <div th:if="${user.isBanned()}">
+            <button type="submit" th:value="unBaned">unBaned</button>
+        </div>
+        <div th:unless="${user.isBanned()}">
+            <button type="submit" th:value="Banned">Banned</button>
+        </div>
+    </form>
+</div>
 </body>
 <th:block th:include="~{/fragments/footer}"></th:block>
 </html>
