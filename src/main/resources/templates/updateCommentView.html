@@ -8,8 +8,9 @@
 <body>
 
 <div class="body-content-telerik">
-    <h2>Update Comment</h2>
-    <form th:action="@{__${requestURI}__}"  th:object="${comment}" action="#" method="POST">
+    <h2 class="text-white">Update Comment</h2>
+    <br/>
+    <form th:action="@{/posts/{id}/comment(id=${comment.postId})}"  th:object="${comment}" action="#" method="POST">
         <lable class="text-white" th:text="#{comment.label.updateText}">Text comment</lable>
         <br/><br/>
         <textarea type="text" th:field="*{text}"></textarea>

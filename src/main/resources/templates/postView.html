@@ -16,7 +16,7 @@
                 <div class="d-inline-flex align-items-center" style="height: 45px;">
                     <a th:href="@{/posts/{id}/update(id=${post.id})}"><small class="me-3 text-light"><i
                             class="fa fa-sign-in me-2"></i>Update Post</small></a>
-                    <a th:href="@{/comment/new}"><small class="me-3 text-light"><i
+                    <a th:href="@{/posts/{id}/comment(id=${post.id})}"><small class="me-3 text-light"><i
                             class="fa fa-sign-in me-2"></i>Create new comment</small></a>
                     <a th:href="@{/posts/{id}/delete(id=${post.id})}"><small class="me-3 text-light"><i
                             class="fa fa-sign-in me-2"></i>Delete Post</small></a>
@@ -41,14 +41,15 @@
     <p class="text-center" th:text="#{post.label.content} + ': ' + ${post.content}">Post content</p>
     <p class="text-center"th:text="#{post.label.timeCreator} + ': ' + ${post.getGetTime()}">Time creator</p>
     <p class="text-center"th:text="#{post.label.likes} + ': ' + ${post.likes}">Likes</p>
-        <form th:action="@{/posts/{id}(id=${post.id})}" th:object="${post}" method="POST">
-            <button type="submit" value="like"> Like</button>
+        <form th:action="@{/posts/{id}/like(id=${post.id})}" th:object="${post}" method="POST">
+            <button type="submit"> Like</button>
         </form>
 
     <p class="text-center"th:text="#{post.label.dislikes} + ': ' + ${post.dislikes}">Dislikes</p>
-        <form th:action="@{/posts/{id}(id=${post.id})}" th:object="${post}" method="POST">
-            <button type="submit" value="dislike"> Dislike</button>
-        </form>
+    <form th:action="@{/posts/{id}/dislike(id=${post.id})}" th:object="${post}" method="POST">
+        <button type="submit"> Dislikes</button>
+    </form>
+
     <div class="text-white" th:if="${post.getComments().isEmpty()}">
         <h2 th:text="#{comment.title.isEmpty}"/>
     </div>
@@ -61,6 +62,17 @@
             </div>
     </div>
 </div>
+
+<!--<div class="body-content-telerik">-->
+<!--    <form th:action="@{/posts/{id}(id=${post.id})}"  th:object="${}" action="#" method="POST">-->
+<!--        <lable th:text="#{comment.label.text}">Text comment</lable>-->
+<!--        <br/>-->
+<!--        <textarea type="text" th:field="*{post.setComments()}"></textarea>-->
+<!--        <label class="label-error-telerik" th:errors="*{post.setComments()}">Text error placeholder</label>-->
+<!--        <br/>-->
+<!--        <input type="submit" value="Save">-->
+<!--    </form>-->
+<!--</div>-->
 
 
 

@@ -22,7 +22,7 @@
 </div>
 
 <div class="body-content-telerik">
-    <form th:action="@{__${requestURI}__}"  th:object="${comment}" action="#" method="POST">
+    <form th:action="@{/posts/{id}/comment(id=${comment.postId})}"  th:object="${comment}" action="#" method="POST">
         <lable th:text="#{comment.label.text}">Text comment</lable>
         <br/>
         <textarea type="text" th:field="*{text}"></textarea>

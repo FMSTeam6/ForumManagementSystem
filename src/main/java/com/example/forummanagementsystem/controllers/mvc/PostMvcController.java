@@ -5,11 +5,15 @@ import com.example.forummanagementsystem.exceptions.AuthenticationFailureExcepti
 import com.example.forummanagementsystem.exceptions.EntityDuplicateException;
 import com.example.forummanagementsystem.exceptions.EntityNotFoundException;
 import com.example.forummanagementsystem.exceptions.UnauthorizedOperationException;
+import com.example.forummanagementsystem.mappers.CommentMapper;
 import com.example.forummanagementsystem.mappers.PostMapper;
+import com.example.forummanagementsystem.models.Comment;
 import com.example.forummanagementsystem.models.Post;
 import com.example.forummanagementsystem.models.User;
+import com.example.forummanagementsystem.models.dto.CommentDto;
 import com.example.forummanagementsystem.models.dto.PostDto;
 import com.example.forummanagementsystem.models.filters.FilterOptions;
+import com.example.forummanagementsystem.services.CommentServices;
 import com.example.forummanagementsystem.services.PostService;
 import com.example.forummanagementsystem.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,16 +34,22 @@ public class PostMvcController {
     private final UserService userService;
     private final PostMapper postMapper;
     private final AuthenticationHelper authenticationHelper;
+    private CommentMapper commentMapper;
+    private CommentServices commentServices;
 
     @Autowired
     public PostMvcController(PostService postService,
                              UserService userService,
                              PostMapper postMapper,
-                             AuthenticationHelper authenticationHelper) {
+                             AuthenticationHelper authenticationHelper,
+                             CommentMapper commentMapper,
+                             CommentServices commentServices) {
         this.postService = postService;
         this.userService = userService;
         this.postMapper = postMapper;
         this.authenticationHelper = authenticationHelper;
+        this.commentMapper = commentMapper;
+        this.commentServices = commentServices;
     }
     @ModelAttribute("isAuthenticated")
     public boolean populateIsAuthenticated(HttpSession session){
@@ -192,13 +202,14 @@ public class PostMvcController {
         }
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/{id}/like")
     public String likePost(@PathVariable int id, Model model, HttpSession session){
         try{
             User user = authenticationHelper.tryGetUserFromSession(session);
             model.addAttribute("post",postService.getPostById(id));
             postService.likePost(id,user);
-            return "postView";
+
+            return "redirect:/posts/" + id;
         }catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -210,21 +221,68 @@ public class PostMvcController {
         }
     }
 
-//    @PostMapping("/{id}")
-//    public String dislikePost(@PathVariable int id, Model model, HttpSession session){
-//        try{
-//            User user = authenticationHelper.tryGetUserFromSession(session);
-//            model.addAttribute("post",postService.getPostById(id));
-//            postService.dislikePost(id,user);
-//            return "postView";
-//        }catch (EntityNotFoundException e) {
-//            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
-//            model.addAttribute("error", e.getMessage());
-//            return "ErrorView";
-//        } catch (UnauthorizedOperationException e){
-//            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
-//            model.addAttribute("error", e.getMessage());
-//            return "ErrorView";
-//        }
-//    }
+    @PostMapping("/{id}/dislike")
+    public String dislikePost(@PathVariable int id, Model model, HttpSession session){
+        try{
+            User user = authenticationHelper.tryGetUserFromSession(session);
+            model.addAttribute("post",postService.getPostById(id));
+            postService.dislikePost(id,user);
+
+            return "redirect:/posts/" + id;
+        }catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (UnauthorizedOperationException e){
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }
+    }
+
+    @GetMapping("/{postId}/comment")
+    public String createComment(@PathVariable int postId ,Model model, HttpSession session) {
+        try {
+            authenticationHelper.tryGetUserFromSession(session);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
+//        model.addAttribute("post",postId);
+        CommentDto comment = new CommentDto();
+        comment.setPostId(postId);
+        model.addAttribute("comment", comment);
+        return "createCommentView";
+    }
+
+    @PostMapping("/{postId}/comment")
+    public String createComment(@PathVariable int postId, @Valid @ModelAttribute("comment") CommentDto dto,
+                                BindingResult errors,
+                                Model model,
+                                HttpSession session) {
+
+        User user;
+        try {
+            user = authenticationHelper.tryGetUserFromSession(session);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/loginView";
+        }
+
+        if (errors.hasErrors()) {
+            return "createCommentView";
+        }
+        try {
+            Comment comment = commentMapper.fromDto(dto);
+            Post post = postService.getPostById(postId);
+            commentServices.createComment(comment, post, user);
+            return "redirect:/posts/"+postId;
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (EntityDuplicateException e) {
+            errors.rejectValue("name", "duplicate_comment_name");
+            return "createCommentView";
+        }
+    }
+
 }

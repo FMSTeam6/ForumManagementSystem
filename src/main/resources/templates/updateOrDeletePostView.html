@@ -22,7 +22,8 @@
 </div>
 
 <div class="body-content-telerik">
-    <h2>Update Post</h2>
+    <h2 class="text-white">Update Post</h2>
+    <br/>
     <form th:action="@{__${requestURI}__}" th:object="${post}"  action="#" method="POST">
         <label th:text="#{post.label.title}">Title</label>
         <br/>

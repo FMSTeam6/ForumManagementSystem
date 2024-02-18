@@ -54,47 +54,47 @@ public class CommentMvcController {
 
     //TODO Create Comment
 
-    @GetMapping("/new")
-    public String createComment(Model model, HttpSession session) {
-        try {
-            authenticationHelper.tryGetUserFromSession(session);
-        } catch (AuthenticationFailureException e) {
-            return "redirect:/auth/login";
-        }
-        model.addAttribute("comment", new CommentDto());
-        return "createCommentView";
-    }
-
-    @PostMapping("/{postId}/new")
-    public String createComment(@PathVariable int postId, @Valid @ModelAttribute("comment") CommentDto dto,
-                                BindingResult errors,
-                                Model model,
-                                HttpSession session) {
-
-        User user;
-        try {
-            user = authenticationHelper.tryGetUserFromSession(session);
-        } catch (AuthenticationFailureException e) {
-            return "redirect:/auth/loginView";
-        }
-
-        if (errors.hasErrors()) {
-            return "createCommentView";
-        }
-        try {
-            Comment comment = commentMapper.fromDto(dto);
-            Post post = postService.getPostById(postId);
-            commentServices.createComment(comment, post, user);
-            return "redirect:/";
-        } catch (EntityNotFoundException e) {
-            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
-            model.addAttribute("error", e.getMessage());
-            return "ErrorView";
-        } catch (EntityDuplicateException e) {
-            errors.rejectValue("name", "duplicate_comment_name");
-            return "createCommentView";
-        }
-    }
+//    @GetMapping("/new")
+//    public String createComment(Model model, HttpSession session) {
+//        try {
+//            authenticationHelper.tryGetUserFromSession(session);
+//        } catch (AuthenticationFailureException e) {
+//            return "redirect:/auth/login";
+//        }
+//        model.addAttribute("comment", new CommentDto());
+//        return "createCommentView";
+//    }
+//
+//    @PostMapping("/{postId}")
+//    public String createComment(@PathVariable int postId, @Valid @ModelAttribute("comment") CommentDto dto,
+//                                BindingResult errors,
+//                                Model model,
+//                                HttpSession session) {
+//
+//        User user;
+//        try {
+//            user = authenticationHelper.tryGetUserFromSession(session);
+//        } catch (AuthenticationFailureException e) {
+//            return "redirect:/auth/loginView";
+//        }
+//
+//        if (errors.hasErrors()) {
+//            return "createCommentView";
+//        }
+//        try {
+//            Comment comment = commentMapper.fromDto(dto);
+//            Post post = postService.getPostById(postId);
+//            commentServices.createComment(comment, post, user);
+//            return "redirect:/";
+//        } catch (EntityNotFoundException e) {
+//            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+//            model.addAttribute("error", e.getMessage());
+//            return "ErrorView";
+//        } catch (EntityDuplicateException e) {
+//            errors.rejectValue("name", "duplicate_comment_name");
+//            return "createCommentView";
+//        }
+//    }
 
     //TODO Update Comment
 
