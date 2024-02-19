@@ -8,6 +8,7 @@ import com.example.forummanagementsystem.exceptions.UnauthorizedOperationExcepti
 import com.example.forummanagementsystem.mappers.UserMapper;
 import com.example.forummanagementsystem.models.User;
 import com.example.forummanagementsystem.models.dto.UserDto;
+import com.example.forummanagementsystem.models.dto.userDtos.SearchUserDto;
 import com.example.forummanagementsystem.models.dto.userDtos.UserUpdateDto;
 import com.example.forummanagementsystem.models.filters.SearchUser;
 import com.example.forummanagementsystem.services.UserService;
@@ -44,8 +45,14 @@ public class UserMvcController {
 
 
     @GetMapping
-    public String showUser(Model model) {
-        model.addAttribute("users", userService.getAll(new SearchUser()));
+    public String showUser(@ModelAttribute("searchUser")SearchUserDto searchUserDto, Model model) {
+        SearchUser searchUser = new SearchUser(searchUserDto.getUsername(),
+                                                    searchUserDto.getEmail(),
+                                                    searchUserDto.getFirstName(),
+                                                    searchUserDto.getLastName(),
+                                                    searchUserDto.getSortBy(),
+                                                    searchUserDto.getSortOrder());
+        model.addAttribute("users", userService.getAll(searchUser));
         return "UsersView";
     }
 

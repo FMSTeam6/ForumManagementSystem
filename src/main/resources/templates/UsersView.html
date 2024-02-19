@@ -20,30 +20,58 @@
         </div>
     </div>
 </div>
-<div th:if="${users.isEmpty()}">
-    <h2 class="text-center" th:text="#{user.title.isEmpty}">No Users</h2>
-</div>
-<div th:unless="${users.isEmpty()}">
-    <h2 class="text-center" th:text="#{user.title.notEmpty}">All Users</h2>
-    <br/>
-</div>
-<div class="table">
-    <div class="header-telerik">
-        <div class="header-cell">
-            <div class="header-cell" th:text="#{users.label.username}">Username</div>
-            <div class="header-cell" th:text="#{users.label.firstName}">First Name</div>
-            <div class="header-cell" th:text="#{users.label.lastName}">Last Name</div>
-            <div class="header-cell" th:text="#{users.label.isAdmin}">Is Admin</div>
-            <div class="header-cell" th:text="#{users.label.isBlocked}">Is Blocked</div>
+<div class="body-content-telerik">
+    <form th:object="${searchUser}" th:action="@{/user}" action="#" method="get">
+        <label th:text="#{user.label.filter}">Filter Options</label>
+        <br/><br/>
+        <input th:field="*{username}" th:placeholder="#{users.label.username}" maxlength="32" size="6">
+        <input th:field="*{email}" th:placeholder="#{users.label.email}" size="6">
+        <input th:field="*{firstName}" th:placeholder="#{users.label.firstName}" size="6">
+        <input th:field="*{lastName}" th:placeholder="#{users.label.lastName}" size="6">
+        <select th:field="*{sortBy}">
+            <option value="">Sort By</option>
+           <option value="username">Username</option>
+           <option value="email">Email</option>
+           <option value="first_name">First Name</option>
+           <option value="last_name">Last Name</option>
+        </select>
+        <select th:field="*{sortOrder}">
+            <option value="">Sort Order</option>
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+        </select>
+        <input type="submit" value="Search">
+    </form>
 
-            <div class="row-label" th:each="user : ${users}">
-                <div class="cell-label">
-                    <a href="#" th:href="@{/user/{id}(id=${user.id})}" th:text="${user.username}"></a>
+    <div th:if="${users.isEmpty()}">
+        <h2 class="text-center" th:text="#{user.title.isEmpty}">No Users</h2>
+    </div>
+    <div th:unless="${users.isEmpty()}">
+        <h2 class="text-center" th:text="#{user.title.notEmpty}">All Users</h2>
+        <br/>
+    </div>
+
+
+    <div class="table">
+        <div class="header-telerik">
+            <div class="header-cell">
+                <div class="header-cell" th:text="#{users.label.username}">Username</div>
+                <div class="header-cell" th:text="#{users.label.firstName}">First Name</div>
+                <div class="header-cell" th:text="#{users.label.lastName}">Last Name</div>
+                <div class="header-cell" th:text="#{users.label.email}">Email</div>
+                <div class="header-cell" th:text="#{users.label.isAdmin}">Is Admin</div>
+                <div class="header-cell" th:text="#{users.label.isBlocked}">Is Blocked</div>
+
+                <div class="row-label" th:each="user : ${users}">
+                    <div class="cell-label">
+                        <a href="#" th:href="@{/user/{id}(id=${user.id})}" th:text="${user.username}"></a>
+                    </div>
+                    <div class="cell-label" th:text="${user.firstName}">First Name</div>
+                    <div class="cell-label" th:text="${user.lastName}">Last Name</div>
+                    <div class="cell-label" th:text="${user.email}">Email</div>
+                    <div class="cell-label" th:text="${user.isAdmin()}">Is Admin</div>
+                    <div class="cell-label" th:text="${user.isBanned()}">Is Blocked</div>
                 </div>
-                <div class="cell-label" th:text="${user.firstName}">First Name</div>
-                <div class="cell-label" th:text="${user.lastName}">Last Name</div>
-                <div class="cell-label" th:text="${user.isAdmin()}">Is Admin</div>
-                <div class="cell-label" th:text="${user.isBanned()}">Is Blocked</div>
             </div>
         </div>
     </div>

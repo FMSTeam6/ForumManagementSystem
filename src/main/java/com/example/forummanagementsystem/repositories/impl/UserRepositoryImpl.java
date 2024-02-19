@@ -204,12 +204,12 @@ public class UserRepositoryImpl implements UserRepository {
                 params.put("email", String.format("%%%s%%", value));
             });
             searchUser.getFirstName().ifPresent(value -> {
-                filters.add(" first_name like: firstName ");
-                params.put("firstName", String.format("%%%s%%", value));
+                filters.add("firstName like: first_name");
+                params.put("first_name", String.format("%%%s%%", value));
             });
             searchUser.getLastName().ifPresent(value -> {
-                filters.add(" last_name =: lastName ");
-                params.put("lastName", String.format("%%%s%%", value));
+                filters.add("lastName like: last_name");
+                params.put("last_name", String.format("%%%s%%", value));
             });
             if (!filters.isEmpty()) {
                 queryString.append(" where ")
@@ -234,22 +234,24 @@ public class UserRepositoryImpl implements UserRepository {
             case "email":
                 orderBy = "email";
                 break;
-            case "firstName":
-                orderBy = "first_name";
+            case "first_name":
+                orderBy = "firstName";
                 break;
-            case "lastName":
-                orderBy = "last_name";
+            case "last_name":
+                orderBy = "lastName";
                 break;
+            default:
+                return "";
         }
-        orderBy = String.format(" orderBy %s ", orderBy);
+        orderBy = String.format(" order by %s", orderBy);
         if (searchUser.getSortOrder().isPresent()
-                && containsIgnoreCase(searchUser.getSortOrder().get(), " desc ")) {
-            orderBy = String.format(" %s desc", orderBy);
+                && searchUser.getSortOrder().get().equalsIgnoreCase("desc")) {
+            orderBy = String.format("%s desc", orderBy);
         }
         return orderBy;
     }
 
-    private static boolean containsIgnoreCase(String value, String sequence) {
-        return value.toLowerCase().contains(sequence.toLowerCase());
-    }
+//    private static boolean containsIgnoreCase(String value, String sequence) {
+//        return value.toLowerCase().contains(sequence.toLowerCase());
+//    }
 }
